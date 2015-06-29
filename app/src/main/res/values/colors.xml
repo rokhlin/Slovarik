@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#000000</color>
+    <color name="primaryColorBar">#333333</color>
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="primary_floating">#009999</color>
+    <color name="primary_pressed_floating">#00CCCC</color>
+    <color name="ripple_floating">#669999</color>
+</resources>

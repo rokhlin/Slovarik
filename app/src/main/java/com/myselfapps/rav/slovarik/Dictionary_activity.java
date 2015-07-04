@@ -42,27 +42,22 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
     public static final String PREFS_SORT_PARAM = "SORT_PARAM";
     public static final String PREFS_DEFAULT_TABLE = "DEFAULT_TABLE";
 
-    //FragmentTransaction ft;
-DictionaryFragment dictionaryFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dictionary);
-//        ft = getFragmentManager().beginTransaction();
-//        dictionaryFragment = new DictionaryFragment();
-//        ft.add(R.id.ll_dictionary_layout,dictionaryFragment);
-//        ft.commit();
 
         init();
 
-        populateWords(SORT_PARAM);
+        //populateWords(SORT_PARAM);
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        populateWords();
+        populateWords(SORT_PARAM);
     }
 
     @Override
@@ -154,10 +149,6 @@ DictionaryFragment dictionaryFragment;
         // as you specify a parent activity in AndroidManifest.xml.
 
         switch (item.getItemId()){
-            case R.id.action_search:
-                Intent intent = new Intent(Dictionary_activity.this, Verbs_activity.class);
-                startActivity(intent);
-                break;
             case R.id.change_language:
                 //сменa языка
                 String s = FIRST_LANGUAGE;
@@ -246,8 +237,8 @@ DictionaryFragment dictionaryFragment;
 
     private void readPreferences() {
         Log.d("Mylog", "----------------------------Load changes-----------------------------");
-        FIRST_LANGUAGE = pref.getString(PREFS_FIRST_LANGUAGE, null);
-        SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, null);
+        FIRST_LANGUAGE = pref.getString(PREFS_FIRST_LANGUAGE, "IL");
+        SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, "RU");
         SORT_PARAM = pref.getString(PREFS_SORT_PARAM, String.valueOf(SortingParameter.primary_word));
     }
 

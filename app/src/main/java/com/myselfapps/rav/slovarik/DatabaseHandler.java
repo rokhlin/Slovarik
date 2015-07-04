@@ -104,7 +104,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private Boolean checkDuplicates(Word word) {
         boolean res = false;
         Word w = getWordByPair(word.getPrimary(), word.getSecondary());
-        if( w == null){
+        if( w != null){
             res = true;
         }
 
@@ -161,7 +161,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         orderBy = parameter;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+       SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_WORDS, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {

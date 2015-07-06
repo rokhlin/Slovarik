@@ -1,9 +1,11 @@
 package com.myselfapps.rav.slovarik;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.support.v7.widget.SearchView;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.mikepenz.materialdrawer.Drawer;
@@ -22,15 +25,15 @@ import java.util.List;
 
 
 public class Dictionary_activity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener{
-    private static enum SortingParameter{
+    private enum SortingParameter{
         primary_word, translation
     }
-
+    SearchManager manager;
     private LeftDrawer leftDrawer;
     private RecyclerView rv;
     private SharedPreferences pref;
     private int Statecount = 0;
-
+    public SearchView searchView;
 
     private String FIRST_LANGUAGE ="IL";
     private String SECOND_LANGUAGE ="RU";
@@ -82,7 +85,41 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dictionary, menu);
+        manager = (SearchManager) getSystemService(SEARCH_SERVICE);
+       // searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem menuItem = menu.findItem(R.id.action_searc);
+        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+//        SearchManager searchManager =
+//                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        searchView =
+//                (SearchView) menu.findItem(R.id.action_searc).getActionView();
+//        searchView.setSearchableInfo(
+//                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(final String query) {
+                if (query == null || query.equals("")) {
+                    populateWords(SORT_PARAM);
+                }
+                else {
+                    populateWords(query);
+                }
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                if (searchView.isActivated() && query.equals("")) {
+                    populateWords(SORT_PARAM);
+                }
+                else {
+                    populateWords(query);
+                }
+                return true;
+            }
+        });
+        //return super.onCreateOptionsMenu(menu);
         return true;
     }
 
@@ -187,8 +224,13 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
     private void populateWords(String parameter) {
         /**************** Init DATABASE *******************/
         DatabaseHandler db = new DatabaseHandler(this);
-
-        List<Word> words = db.getAllWordsSortBy(parameter);
+        List<Word> words;
+        if(parameter.equals(SORT_PARAM)){
+            words = db.getAllWordsSortBy(parameter);
+        }
+        else {
+            words = db.search(parameter);
+        }
 
         RecyclerViewWordAdapter adapter = new RecyclerViewWordAdapter(words);
         rv.setAdapter(adapter);

@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_WORDS = "words";
 
     // Contacts Table Columns names
-    private static final String KEY_ID = "_id";
+    private static final String KEY_ID = "rowid";
     private static final String KEY_PRIMARY = "primary_word";
     private static final String KEY_SECONDARY = "translation";
     private static final String KEY_TRANSCRIPTION = "transcription";
@@ -30,10 +30,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_NOTES = "notes";
     private static final String KEY_GROUP = "group1";
     private static final String KEY_GROUP2 = "group2";
-
+    private static final String CREATE_WORDS_TABLE = "CREATE VIRTUAL TABLE " + TABLE_WORDS + " USING fts3("
+            + KEY_PRIMARY + " TEXT,"
+            + KEY_TRANSCRIPTION + " TEXT,"
+            + KEY_SECONDARY + " TEXT,"
+            + KEY_GENDER + " TEXT,"
+            + KEY_PARTOFSPEECH + " TEXT,"
+            + KEY_AUDIO + " TEXT,"
+            + KEY_PICTURE + " TEXT,"
+            + KEY_NOTES + " TEXT,"
+            + KEY_GROUP + " TEXT,"
+            + KEY_GROUP2 + " TEXT"
+            + ")";
 
     // query strings
-    private String[] columns = null;
+    private String[] columns = new String[]{KEY_ID,"*"};
     private String selection = null;
     private String[] selectionArgs = null;
     private String groupBy = null;
@@ -46,24 +57,54 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    // Filling Word from CURSOR
+    private Word fillWord(Cursor cursor) {
+        Word word;
+        do {
+            word = new Word();
+            word.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            word.setPrimary(cursor.getString(cursor.getColumnIndex(KEY_PRIMARY)));
+            word.setTranscription(cursor.getString(cursor.getColumnIndex(KEY_TRANSCRIPTION)));
+            word.setSecondary(cursor.getString(cursor.getColumnIndex(KEY_SECONDARY)));
+            word.setGender(cursor.getString(cursor.getColumnIndex(KEY_GENDER)));
+            word.setPartOfSpeech(cursor.getString(cursor.getColumnIndex(KEY_PARTOFSPEECH)));
+            word.setAudio(cursor.getString(cursor.getColumnIndex(KEY_AUDIO)));
+            word.setPicture(cursor.getString(cursor.getColumnIndex(KEY_PICTURE)));
+            word.setNotes(cursor.getString(cursor.getColumnIndex(KEY_NOTES)));
+            word.setGroup1(cursor.getString(cursor.getColumnIndex(KEY_GROUP)));
+            word.setGroup2(cursor.getString(cursor.getColumnIndex(KEY_GROUP2)));
+
+
+        } while (cursor.moveToNext());
+        return word;
+    }
+
+    // Filling list Words from CURSOR
+    private List<Word> fillWords(Cursor cursor) {
+        List<Word> words = new ArrayList<>();
+        do {
+            Word word = new Word();
+            word.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            word.setPrimary(cursor.getString(cursor.getColumnIndex(KEY_PRIMARY)));
+            word.setTranscription(cursor.getString(cursor.getColumnIndex(KEY_TRANSCRIPTION)));
+            word.setSecondary(cursor.getString(cursor.getColumnIndex(KEY_SECONDARY)));
+            word.setGender(cursor.getString(cursor.getColumnIndex(KEY_GENDER)));
+            word.setPartOfSpeech(cursor.getString(cursor.getColumnIndex(KEY_PARTOFSPEECH)));
+            word.setAudio(cursor.getString(cursor.getColumnIndex(KEY_AUDIO)));
+            word.setPicture(cursor.getString(cursor.getColumnIndex(KEY_PICTURE)));
+            word.setNotes(cursor.getString(cursor.getColumnIndex(KEY_NOTES)));
+            word.setGroup1(cursor.getString(cursor.getColumnIndex(KEY_GROUP)));
+            word.setGroup2(cursor.getString(cursor.getColumnIndex(KEY_GROUP2)));
+
+            words.add(word);
+        } while (cursor.moveToNext());
+        return words;
+    }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_WORDS_TABLE = "CREATE TABLE " + TABLE_WORDS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + KEY_PRIMARY + " TEXT,"
-                + KEY_TRANSCRIPTION + " TEXT,"
-                + KEY_SECONDARY + " TEXT,"
-                + KEY_GENDER + " TEXT,"
-                + KEY_PARTOFSPEECH + " TEXT,"
-                + KEY_AUDIO + " TEXT,"
-                + KEY_PICTURE + " TEXT,"
-                + KEY_NOTES + " TEXT,"
-                + KEY_GROUP + " TEXT,"
-                + KEY_GROUP2 + " TEXT"
-                + ")";
         db.execSQL(CREATE_WORDS_TABLE);
-
     }
 
     @Override
@@ -112,7 +153,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // Adding new words
-    void addWords(ArrayList<Word> words) {
+    public void addWords(ArrayList<Word> words) {
         Log.d("myLog", "--------------------------------Add words------------------------------");
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -125,7 +166,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Getting All Words
     public List<Word> getAllWords() {
         Log.d("myLog", "--------------------------------Get All Words------------------------------");
-        List<Word> words = new ArrayList<Word>();
+        List<Word> words = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_WORDS;
 
@@ -134,22 +175,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
-            do {
-                Word word = new Word();
-                //word.setId(cursor.getString(0));
-                word.setPrimary(cursor.getString(1));
-                word.setTranscription(cursor.getString(2));
-                word.setSecondary(cursor.getString(3));
-                word.setGender(cursor.getString(4));
-                word.setPartOfSpeech(cursor.getString(5));
-                word.setAudio(cursor.getString(6));
-                word.setPicture(cursor.getString(7));
-                word.setNotes(cursor.getString(8));
-                word.setGroup1(cursor.getString(9));
-                word.setGroup2(cursor.getString(10));
-
-                words.add(word);
-            } while (cursor.moveToNext());
+            words = fillWords(cursor);
         }
         return words;
     }
@@ -157,33 +183,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Getting All Words Sort By Parameter
     public List<Word> getAllWordsSortBy(String parameter) {
         Log.d("myLog", "--------------------------------Get All Words Sort By "+parameter+"------------------------------");
-        List<Word> words = new ArrayList<Word>();
-
+        List<Word> words = new ArrayList<>();
         orderBy = parameter;
-
        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_WORDS, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                Word word = new Word();
-                word.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
-                word.setPrimary(cursor.getString(cursor.getColumnIndex(KEY_PRIMARY)));
-                word.setTranscription(cursor.getString(cursor.getColumnIndex(KEY_TRANSCRIPTION)));
-                word.setSecondary(cursor.getString(cursor.getColumnIndex(KEY_SECONDARY)));
-                word.setGender(cursor.getString(cursor.getColumnIndex(KEY_GENDER)));
-                word.setPartOfSpeech(cursor.getString(cursor.getColumnIndex(KEY_PARTOFSPEECH)));
-                word.setAudio(cursor.getString(cursor.getColumnIndex(KEY_AUDIO)));
-                word.setPicture(cursor.getString(cursor.getColumnIndex(KEY_PICTURE)));
-                word.setNotes(cursor.getString(cursor.getColumnIndex(KEY_NOTES)));
-                word.setGroup1(cursor.getString(cursor.getColumnIndex(KEY_GROUP)));
-                word.setGroup2(cursor.getString(cursor.getColumnIndex(KEY_GROUP2)));
 
-                words.add(word);
-            } while (cursor.moveToNext());
+        // looping through all words and adding to list
+        if (cursor.moveToFirst()) {
+            words = fillWords(cursor);
         }
         return words;
     }
+
+
+    // Getting All Words Sort By List
+    public List<Word> getAllWordsSortBy(List<Integer> list) {
+        Log.d("myLog", "--------------------------------Get All Words Sort By list------------------------------");
+        List<Word> words = new ArrayList<>();
+
+        for (int x : list){
+           words.add(getWordByID(x));
+        }
+
+        return words;
+    }
+
 
     // Getting Word  By ID
     public Word getWordByID(int id) {
@@ -194,62 +218,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         selection = id+"";
         selectionArgs = new String[] { selection };
 
-        query ="SELECT * FROM " + TABLE_WORDS + " WHERE "+KEY_ID + " = ?";
+        query ="SELECT rowid,* FROM " + TABLE_WORDS + " WHERE "+KEY_ID + " = ?";
         Cursor cursor = db.rawQuery(query, selectionArgs);
                 // looping through all rows and adding to list
         Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
         if (cursor.moveToFirst()) {
-            do {
-                word = new Word();
-                word.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
-                word.setPrimary(cursor.getString(cursor.getColumnIndex(KEY_PRIMARY)));
-                word.setTranscription(cursor.getString(cursor.getColumnIndex(KEY_TRANSCRIPTION)));
-                word.setSecondary(cursor.getString(cursor.getColumnIndex(KEY_SECONDARY)));
-                word.setGender(cursor.getString(cursor.getColumnIndex(KEY_GENDER)));
-                word.setPartOfSpeech(cursor.getString(cursor.getColumnIndex(KEY_PARTOFSPEECH)));
-                word.setAudio(cursor.getString(cursor.getColumnIndex(KEY_AUDIO)));
-                word.setPicture(cursor.getString(cursor.getColumnIndex(KEY_PICTURE)));
-                word.setNotes(cursor.getString(cursor.getColumnIndex(KEY_NOTES)));
-                word.setGroup1(cursor.getString(cursor.getColumnIndex(KEY_GROUP)));
-                word.setGroup2(cursor.getString(cursor.getColumnIndex(KEY_GROUP2)));
+            word = fillWord(cursor);
 
-
-            } while (cursor.moveToNext());
         }
         return word;
     }
+
+
 
     // Getting Word  By Pair Primary word and Translation
     public Word getWordByPair(String wPrimary, String wTranslation) {
         Log.d("myLog", "--------------------------------Getting Word  By Pair = "+wPrimary+"-"+wTranslation+"------------------------------");
         Word word = null;
-
         SQLiteDatabase db = this.getWritableDatabase();
 
         selectionArgs = new String[] { wPrimary, wTranslation };
-
-        query ="SELECT * FROM " + TABLE_WORDS + " WHERE "+KEY_PRIMARY + " = ? AND "+KEY_TRANSCRIPTION + " = ?";
+        query ="SELECT rowid,* FROM " + TABLE_WORDS + " WHERE "+KEY_PRIMARY + " = ? AND "+KEY_TRANSCRIPTION + " = ?";
 
         Cursor cursor = db.rawQuery(query, selectionArgs);
-        // looping through all rows and adding to list
         Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
         if (cursor.moveToFirst()) {
-            do {
-                word = new Word();
-                word.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
-                word.setPrimary(cursor.getString(cursor.getColumnIndex(KEY_PRIMARY)));
-                word.setTranscription(cursor.getString(cursor.getColumnIndex(KEY_TRANSCRIPTION)));
-                word.setSecondary(cursor.getString(cursor.getColumnIndex(KEY_SECONDARY)));
-                word.setGender(cursor.getString(cursor.getColumnIndex(KEY_GENDER)));
-                word.setPartOfSpeech(cursor.getString(cursor.getColumnIndex(KEY_PARTOFSPEECH)));
-                word.setAudio(cursor.getString(cursor.getColumnIndex(KEY_AUDIO)));
-                word.setPicture(cursor.getString(cursor.getColumnIndex(KEY_PICTURE)));
-                word.setNotes(cursor.getString(cursor.getColumnIndex(KEY_NOTES)));
-                word.setGroup1(cursor.getString(cursor.getColumnIndex(KEY_GROUP)));
-                word.setGroup2(cursor.getString(cursor.getColumnIndex(KEY_GROUP2)));
-
-
-            } while (cursor.moveToNext());
+            word = fillWord(cursor);
         }
         else {
             Log.d("myLog", "--------------------------------Pair = "+wPrimary+"-"+wTranslation+" was not found------------------------------");
@@ -317,13 +311,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Getting Word Count
     public int getWordsCount() {
         Log.d("myLog", "--------------------------------Get Words Count------------------------------");
-        String countQuery = "SELECT  * FROM " + TABLE_WORDS;
+        String countQuery = "SELECT  rowid,* FROM " + TABLE_WORDS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
 
         return cursor.getCount();
     }
+    // Search method
+    public List<Word> search(String searchStr) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Word> words = new ArrayList<>();
+        Cursor cursor = null;
+
+        selection = TABLE_WORDS + " MATCH '"+ searchStr + "*'";
+
+        try{
+            cursor = db.query(true, TABLE_WORDS, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+
+            if(cursor!= null && cursor.moveToFirst()){
+                words = fillWords(cursor);
+            }
+        }catch(Exception e){
+            Log.e("myLog", "An error occurred while searching for "+searchStr+": "+e.toString(), e);
+        }finally{
+            if(cursor!=null && !cursor.isClosed()){
+                cursor.close();
+            }
+        }
 
 
+        return words;
+    }
 }

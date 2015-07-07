@@ -181,12 +181,12 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (primaryWord.getText().equals(""))
-                            primaryWord.setHintTextColor(getResources().getColor(R.color.red));
-                        if (secondaryWord.getText().equals(""))
-                            secondaryWord.setHintTextColor(getResources().getColor(R.color.red));
-                        if (transcriptionWord.getText().equals(""))
-                            transcriptionWord.setHintTextColor(getResources().getColor(R.color.red));
+                        if (primaryWord.getText().toString().equals(""))
+                            primaryWord.setHintTextColor(getResources().getColor(R.color.red_hint));
+                        if (secondaryWord.getText().toString().equals(""))
+                            secondaryWord.setHintTextColor(getResources().getColor(R.color.red_hint));
+                        if (transcriptionWord.getText().toString().equals(""))
+                            transcriptionWord.setHintTextColor(getResources().getColor(R.color.red_hint));
                     }
                 })
 

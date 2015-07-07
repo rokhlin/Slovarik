@@ -1,8 +1,10 @@
 package com.myselfapps.rav.slovarik;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -81,10 +83,6 @@ public class EditWord_activity extends AppCompatActivity implements Drawer.OnDra
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            //add code
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -108,22 +106,28 @@ public class EditWord_activity extends AppCompatActivity implements Drawer.OnDra
             @Override
             public void onClick(View v) {
 
-                if(checkChanges()){
-                    word.setId(selected_ID + "");
-                    word.setPrimary(primaryWord.getText().toString());
-                    word.setSecondary(secondaryWord.getText().toString());
-                    word.setTranscription(transcriptionWord.getText().toString());
-                    word.setNotes(notes.getText().toString());
-                    String ss= (String) ((RadioButton) findViewById(gender_ID)).getText();
-                    word.setGender(ss);
-                    word.setPartOfSpeech(partOfSpeechData[spinner_ID]);
+                if (primaryWord.getText().toString().equals("")) { //Check zero-fields
+                    showAlert(1);
+                } else if (secondaryWord.getText().toString().equals("")) {
+                    showAlert(2);
+                } else {
+                    if (checkChanges()) {//Updating WORD
+                        word.setId(selected_ID + "");
+                        word.setPrimary(primaryWord.getText().toString());
+                        word.setSecondary(secondaryWord.getText().toString());
+                        word.setTranscription(transcriptionWord.getText().toString());
+                        word.setNotes(notes.getText().toString());
+                        String ss = (String) ((RadioButton) findViewById(gender_ID)).getText();
+                        word.setGender(ss);
+                        word.setPartOfSpeech(partOfSpeechData[spinner_ID]);
+                    }
+
+                    db.updateWord(word);
+
+                    Intent intent = new Intent(EditWord_activity.this, ViewWord.class);
+                    intent.putExtra("selected_ID", word.getId());
+                    startActivity(intent);
                 }
-
-                db.updateWord(word);
-
-                Intent intent = new Intent(EditWord_activity.this, ViewWord.class);
-                intent.putExtra("selected_ID", word.getId());
-                startActivity(intent);
             }
         });
         genders = new String[]{getResources().getString(R.string.Label_Gender_Neuter),
@@ -135,11 +139,11 @@ public class EditWord_activity extends AppCompatActivity implements Drawer.OnDra
     private boolean checkChanges() {
         boolean result = false;
 
-        if(!(primaryWord.getText().equals(word.getPrimary()))){result = true;}
-        else if(!(secondaryWord.getText().equals(word.getSecondary()))){result = true;}
-        else if(!(transcriptionWord.getText().equals(word.getTranscription()))){result = true;}
-        else if(!(notes.getText().equals(word.getNotes()))){result = true;}
-        else if(!(secondaryWord.getText().equals(word.getSecondary()))){result = true;}
+        if(!(primaryWord.getText().toString().equals(word.getPrimary()))){result = true;}
+        else if(!(secondaryWord.getText().toString().equals(word.getSecondary()))){result = true;}
+        else if(!(transcriptionWord.getText().toString().equals(word.getTranscription()))){result = true;}
+        else if(!(notes.getText().toString().equals(word.getNotes()))){result = true;}
+        else if(!(secondaryWord.getText().toString().equals(word.getSecondary()))){result = true;}
         else if(rg1.getCheckedRadioButtonId() != gender_ID ){
             result = true;
             gender_ID = rg1.getCheckedRadioButtonId();
@@ -153,6 +157,33 @@ public class EditWord_activity extends AppCompatActivity implements Drawer.OnDra
         Log.d("Mylog", "----------------------------Load changes-----------------------------");
         FIRST_LANGUAGE = pref.getString(PREFS_FIRST_LANGUAGE, null);
         SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, null);
+    }
+
+    private void showAlert(int i) {
+        String message = null;
+        switch (i){
+            case 1: message = getResources().getString(R.string.Alert_dialog_Invalid_Primary);
+                break;
+            case 2: message = getResources().getString(R.string.Alert_dialog_Invalid_Translation);
+                break;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.Alert_dialog_title))
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (primaryWord.getText().toString().equals(""))
+                            primaryWord.setHintTextColor(getResources().getColor(R.color.red_hint));
+                        if (secondaryWord.getText().toString().equals(""))
+                            secondaryWord.setHintTextColor(getResources().getColor(R.color.red_hint));
+                        if (transcriptionWord.getText().toString().equals(""))
+                            transcriptionWord.setHintTextColor(getResources().getColor(R.color.red_hint));
+                    }
+                })
+
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void populateWord(int id) {

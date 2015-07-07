@@ -1,8 +1,10 @@
 package com.myselfapps.rav.slovarik;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -51,27 +53,8 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         initToolbar();
         //leftDrawer = new LeftDrawer(mActionBarToolbar,this);
         pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addWord);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        initFloatingButton();
 
-                addSecondWord();
-
-                try {
-                    db.addWords(words);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                clearFields();
-                for (Word word : words) {
-                    Log.d("MyLog", "Words: " + word.getId() + " - " + word.getPrimary() + " - " + word.getSecondary());
-                }
-                Intent intent = new Intent(AddNewWord_activity.this, Dictionary_activity.class);
-                startActivity(intent);
-            }
-        });
 
         primaryWord = (EditText) findViewById(R.id.et_PrimaryWord);
         secondaryWord = (EditText) findViewById(R.id.et_SecondaryWord);
@@ -95,6 +78,30 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         initSpinner();
 
          db = new DatabaseHandler(this);
+    }
+
+    private void initFloatingButton() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addWord);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(addSecondWord()){
+                    try {
+                        db.addWords(words);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    clearFields();
+                    for (Word word : words) {
+                        Log.d("MyLog", "Words: " + word.getId() + " - " + word.getPrimary() + " - " + word.getSecondary());
+                    }
+                    Intent intent = new Intent(AddNewWord_activity.this, Dictionary_activity.class);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void setFlags(ImageButton ib,String language) {
@@ -125,27 +132,66 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
 
     }
 
-    private void addSecondWord() {
+    private boolean addSecondWord() {
+        boolean res = false;
         int selectedId = rg1.getCheckedRadioButtonId();
         // find the radiobutton by returned id
         RadioButton radioSexButton = (RadioButton) findViewById(selectedId);
         String gender = radioSexButton.getText().toString();
         String partOfSpeech = spinner3.getSelectedItem().toString();
+
         String primary = String.valueOf(primaryWord.getText());
         String secondary = String.valueOf(secondaryWord.getText());
         String transcription = String.valueOf(transcriptionWord.getText());
+
         String note = String.valueOf(notes.getText());
 
+        if(primary.equals("")){
+            showAlert(1);
+        }
+        else if(secondary.equals("")){
+            showAlert(2);
+        }
+        else {
+            words.add(new Word(primary, transcription, secondary, gender, partOfSpeech, note));
 
-        words.add(new Word(primary, transcription, secondary, gender, partOfSpeech, note));
-
-        //Clear fields
-        secondaryWord.setText("");
-        rg1.check(R.id.rb_Neuter);
-        spinner3.setSelection(0);
+            //Clear fields
+            secondaryWord.setText("");
+            rg1.check(R.id.rb_Neuter);
+            spinner3.setSelection(0);
 
 
-        setSecondaryWordHint();
+            setSecondaryWordHint();
+            res = true;
+        }
+        return res;
+    }
+
+    private void showAlert(int i) {
+        String message = null;
+        switch (i){
+            case 1: message = getResources().getString(R.string.Alert_dialog_Invalid_Primary);
+                break;
+            case 2: message = getResources().getString(R.string.Alert_dialog_Invalid_Translation);
+                break;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.Alert_dialog_title))
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (primaryWord.getText().equals(""))
+                            primaryWord.setHintTextColor(getResources().getColor(R.color.red));
+                        if (secondaryWord.getText().equals(""))
+                            secondaryWord.setHintTextColor(getResources().getColor(R.color.red));
+                        if (transcriptionWord.getText().equals(""))
+                            transcriptionWord.setHintTextColor(getResources().getColor(R.color.red));
+                    }
+                })
+
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     private void readPreferences() {

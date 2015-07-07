@@ -49,7 +49,7 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_word);
         initToolbar();
-        leftDrawer = new LeftDrawer(mActionBarToolbar,this);
+        //leftDrawer = new LeftDrawer(mActionBarToolbar,this);
         pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addWord);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -163,8 +163,8 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
 
     private void initSpinner() {
 
-        final String[] data = {"Введите слово","הזן המילה"};
-        final String[] partOfSpeechData= {getResources().getString(R.string.PartsOfSpeech_Adjective),
+        final String[] partOfSpeechData= {getResources().getString(R.string.PartsOfSpeech_NotSelected),
+                getResources().getString(R.string.PartsOfSpeech_Adjective),
                 getResources().getString(R.string.PartsOfSpeech_Adverb),
                 getResources().getString(R.string.PartsOfSpeech_Numeral),
                 getResources().getString(R.string.PartsOfSpeech_Preposition),
@@ -196,13 +196,7 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
 
     @Override
     public void onBackPressed(){
-        if(leftDrawer.getResult() != null && leftDrawer.getResult().isDrawerOpen()){
-            leftDrawer.drawerClose();
-        }
-
-        else {
             super.onBackPressed();
-        }
     }
 
 
@@ -245,7 +239,7 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
 
     @Override
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-        Intent intent = null;
+        Intent intent;
         switch (i) {
             case 0:
                 intent = new Intent(AddNewWord_activity.this, Dictionary_activity.class);

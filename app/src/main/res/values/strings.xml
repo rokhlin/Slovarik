@@ -14,6 +14,8 @@
     <string name="title_activity_verbs">Verbs</string>
 
     <string name="PartsOfSpeech">Parts Of Speech</string>
+    <string name="PartsOfSpeech2">Parts Of Speech:</string>
+
     <string name="PartsOfSpeech_Verb">Verb</string>
     <string name="PartsOfSpeech_Substantive">Substantive</string>
     <string name="PartsOfSpeech_Adjective">Adjective</string>
@@ -21,16 +23,19 @@
     <string name="PartsOfSpeech_Pronoun">Pronoun</string>
     <string name="PartsOfSpeech_Adverb">Adverb</string>
     <string name="PartsOfSpeech_Preposition">Preposition</string>
+    <string name="PartsOfSpeech_NotSelected">Not selected</string>
 
     <string name="Label_InputText">Input Your Word</string>
     <string name="Label_Search">Search</string>
     <string name="Label_Change_language">Change language</string>
     <string name="Label_Add_Word">Add word</string>
     <string name="Label_Edit_Word">Edit word</string>
+    <string name="Label_Edit">EDIT</string>
     <string name="Label_SecondaryWordHint">You can add another meaning of the word, if you press the "+" button.</string>
     <string name="Label_Notes">Notes</string>
     <string name="Label_Transcription">Type Transcription</string>
     <string name="Label_Gender">Gender</string>
+    <string name="Label_Gender2">Gender:</string>
     <string name="Label_Gender_Male">Male</string>
     <string name="Label_Gender_Female">Female</string>
     <string name="Label_Gender_Neuter">Neuter</string>
@@ -42,6 +47,8 @@
     <string name="Label_Labels">Labels</string>
     <string name="Label_Cancel">Cancel</string>
 
+
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_edit_word_activity">EditWord</string>
 </resources>

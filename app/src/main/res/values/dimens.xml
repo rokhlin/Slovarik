@@ -4,8 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_margin_betweenElements">24dp</dimen>
 
-    <dimen name="flag_width">72dp</dimen>
-    <dimen name="flag_height">48dp</dimen>
+    <dimen name="flag_width">48dp</dimen>
+    <dimen name="flag_height">36dp</dimen>
 
     <dimen name="gender_height">32dp</dimen>
     <dimen name="gender_width">48dp</dimen>

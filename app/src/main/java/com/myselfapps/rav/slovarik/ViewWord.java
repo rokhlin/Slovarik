@@ -9,12 +9,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.List;
 
-public class ViewWord extends AppCompatActivity implements View.OnLongClickListener, View.OnClickListener {
+
+public class ViewWord extends AppCompatActivity implements View.OnClickListener {
     private SharedPreferences pref;
     private DatabaseHandler db;
     private Word word;
@@ -29,10 +34,9 @@ public class ViewWord extends AppCompatActivity implements View.OnLongClickListe
 
     private ImageButton btnEdit,
                 btnDelete,
-                btnCancel,
-                btnMainWord;
+                btnCancel;
     private LinearLayout editButtons;
-
+    private ListView sameWords;
 
     private String FIRST_LANGUAGE;
     private String SECOND_LANGUAGE;
@@ -51,38 +55,72 @@ public class ViewWord extends AppCompatActivity implements View.OnLongClickListe
         /**************** Init Fields *******************/
         wGender = (TextView) findViewById(R.id.tv_viewWord_gender);
         wPrimary = (TextView) findViewById(R.id.tv_viewWord_primary);
-        wPrimary.setOnLongClickListener(this);
         wPartOfSpeech = (TextView) findViewById(R.id.tv_viewWord_partOfSpeech);
         wTranslation = (TextView) findViewById(R.id.tv_viewWord_translation);
-        wTranslation.setOnLongClickListener(this);
         wTranscription = (TextView) findViewById(R.id.tv_viewWord_transcription);
         wNote = (TextView) findViewById(R.id.tv_viewWord_notes);
-        wNote.setOnLongClickListener(this);
         wNoun = (TextView) findViewById(R.id.tv_viewWord_nouns);
-        labelSameWords = (TextView) findViewById(R.id.tv_viewWord_labelSameWords);
-
+        sameWords = (ListView) findViewById(R.id.iv_ViewWord_sameword);
         editButtons = (LinearLayout) findViewById(R.id.ll_viewWord_hiddenEditBottons);
         btnCancel = (ImageButton) findViewById(R.id.ib_viewWord_cancel);
         btnEdit = (ImageButton) findViewById(R.id.ib_viewWord_edit);
         btnDelete = (ImageButton) findViewById(R.id.ib_viewWord_delete);
-        btnMainWord = (ImageButton) findViewById(R.id.ib_viewWord_mainWord);
-        btnMainWord.setTag("1");
 
-        btnMainWord.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
+        btnEdit.setOnClickListener(this);
 
         init();
 
         populateWord(selected_ID);
+        fillSameWords(word.getPrimary(), word.getSecondary());
 
+
+    }
+
+    private void fillSameWords(String primary, String secondary) {
+        /**************** Init DATABASE *******************/
+        DatabaseHandler db = new DatabaseHandler(this);
+        List<Word> words = null;
+
+        try {
+            words = db.getAllWordsBy(primary);
+        }catch (Exception e){e.printStackTrace();}
+
+        if(words != null ){
+            for (Word w : words){
+                if(w.getSecondary().equals(secondary)){
+                    words.remove(w);
+                    break;
+                }
+            }
+            String[] translates = new String[words.size()];
+            final Integer[] ids = new Integer[words.size()];
+            for (int i = 0; i <words.size() ; i++) {
+                translates[i] = words.get(i).getSecondary();
+                ids[i] = Integer.parseInt(words.get(i).getId());
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1, translates);
+
+            sameWords.setAdapter(adapter);
+            sameWords.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    populateWord(ids[position]);
+                    fillSameWords(word.getPrimary(), word.getSecondary());
+                }
+            });
+
+        }
 
     }
 
     private void populateWord(int id) {
         /**************** Init DATABASE *******************/
         DatabaseHandler db = new DatabaseHandler(this);
-        Word word = db.getWordByID(id);
+        word = db.getWordByID(id);
         wPrimary.setText(word.getPrimary());
         if(word.getTranscription() != null){
             wTranscription.setText(word.getTranscription());
@@ -115,7 +153,13 @@ public class ViewWord extends AppCompatActivity implements View.OnLongClickListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.item_edit_word) {
+            if(editButtons.getVisibility()==View.GONE) {
+                editButtons.setVisibility(View.VISIBLE);
+            }
+            else if(editButtons.getVisibility()==View.VISIBLE) {
+                editButtons.setVisibility(View.GONE);
+            }
             return true;
         }
 
@@ -144,46 +188,24 @@ public class ViewWord extends AppCompatActivity implements View.OnLongClickListe
         SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, null);
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        String strOld;
 
-        if(v instanceof TextView) {
-            switch (v.getId()) {
-                case R.id.tv_viewWord_primary:
-                    editButtons.setVisibility(View.VISIBLE);
-                    break;
-                default:
-                   //открыть диалог с предложением ввести новое значение --старое значение должно быть уже внесено
-                   //сравнить значение со strOld в случае если есть разница, тогда произвести обновление в бд
-            }
-        }
-        return false;
-    }
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
-
-            case R.id.ib_viewWord_mainWord:
-                //дописать логику сохранения ключевого слова
-                if(btnMainWord.getTag() == "1") {
-                    btnMainWord.setImageResource(R.drawable.star_unchecked);
-                    btnMainWord.setTag("2");
-                }
-                else {
-                    btnMainWord.setImageResource(R.drawable.star_checked);
-                    btnMainWord.setTag("1");
-                }
-                break;
-
             case R.id.ib_viewWord_cancel:
                 editButtons.setVisibility(View.GONE);
                 break;
             case R.id.ib_viewWord_delete:
                 db.deleteWord(selected_ID);
 
-                Intent intent = new Intent(ViewWord.this, Dictionary_activity.class);
+                intent = new Intent(ViewWord.this, Dictionary_activity.class);
+                startActivity(intent);
+                break;
+            case R.id.ib_viewWord_edit:
+                intent = new Intent(this, EditWord_activity.class);
+                intent.putExtra("selected_ID", word.getId());
                 startActivity(intent);
                 break;
         }

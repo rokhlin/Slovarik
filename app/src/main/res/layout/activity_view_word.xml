@@ -17,7 +17,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@color/abc_search_url_text_selected">
+        android:divider="@color/abc_search_url_text_selected"
+        android:weightSum="1">
 
         <TextView
             android:layout_width="wrap_content"
@@ -72,44 +73,80 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/textView"
-                android:layout_weight="2"
-                android:layout_gravity="center" />
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_gravity="center">
 
             <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/tv_viewWord_translation"
-            android:layout_gravity="center"
-                android:layout_weight="2" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="0.60">
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/ib_viewWord_mainWord"
-                    android:layout_gravity="right"
-                    android:src="@drawable/star_checked"
-                    android:background="@color/backgroundColor"
-                    android:layout_margin="@dimen/activity_horizontal_margin" />
-            </LinearLayout>
+            android:layout_gravity="center" />
 
         </LinearLayout>
+
+        <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/PartsOfSpeech2"
+                android:id="@+id/textView2"
+                android:layout_marginLeft="@dimen/material_drawer_account_header_horizontal_bottom" />
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_viewWord_partOfSpeech"
+            android:layout_weight="1"
+                android:layout_marginLeft="@dimen/material_drawer_account_header_horizontal_bottom" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Label_Gender2"
+                android:id="@+id/textView3"
+                android:layout_marginLeft="@dimen/material_drawer_account_header_horizontal_bottom" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_viewWord_gender"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/material_drawer_account_header_horizontal_bottom" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_viewWord_nouns"
+            android:layout_weight="1" />
+        </LinearLayout>
+
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_viewWord_notes"
+        android:layout_margin="@dimen/activity_horizontal_margin" />
+
 
         <TextView
         android:layout_width="wrap_content"
@@ -121,57 +158,11 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_horizontal_margin" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ll_viewWord_sameWords"></LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout2">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_viewWord_partOfSpeech"
-            android:layout_weight="1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_viewWord_gender"
-            android:layout_weight="1" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_viewWord_nouns"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tv_viewWord_notes"
-        android:layout_margin="@dimen/activity_horizontal_margin" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/Label_Labels"
-        android:id="@+id/textView5"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ll_viewWord_labels"></LinearLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="269dp"
+            android:id="@+id/iv_ViewWord_sameword"
+            android:clickable="true" />
 
     </LinearLayout>
 </ScrollView>

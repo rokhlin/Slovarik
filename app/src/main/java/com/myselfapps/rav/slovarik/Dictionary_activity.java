@@ -86,16 +86,9 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dictionary, menu);
         manager = (SearchManager) getSystemService(SEARCH_SERVICE);
-       // searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         MenuItem menuItem = menu.findItem(R.id.action_searc);
         searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-//        SearchManager searchManager =
-//                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        searchView =
-//                (SearchView) menu.findItem(R.id.action_searc).getActionView();
-//        searchView.setSearchableInfo(
-//                searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextChange(final String query) {
@@ -119,7 +112,6 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
                 return true;
             }
         });
-        //return super.onCreateOptionsMenu(menu);
         return true;
     }
 

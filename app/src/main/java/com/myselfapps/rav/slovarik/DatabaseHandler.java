@@ -195,6 +195,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return words;
     }
 
+    // Getting All Translates conforming the Primary
+    public List<Word> getAllWordsBy(String primary) {
+        Log.d("myLog", "--------------------------------Getting All Translates by Primary = "+primary+"------------------------------");
+        List<Word> words = new ArrayList<>();
+        selection = KEY_PRIMARY + "= ?";
+        selectionArgs = new String[]{primary};
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_WORDS, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+
+        // looping through all words and adding to list
+        if (cursor.moveToFirst()) {
+            words = fillWords(cursor);
+        }
+        return words;
+    }
 
     // Getting All Words Sort By List
     public List<Word> getAllWordsSortBy(List<Integer> list) {
@@ -207,7 +223,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return words;
     }
-
 
     // Getting Word  By ID
     public Word getWordByID(int id) {
@@ -228,8 +243,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return word;
     }
-
-
 
     // Getting Word  By Pair Primary word and Translation
     public Word getWordByPair(String wPrimary, String wTranslation) {
@@ -268,8 +281,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_GROUP, word.getGroup1());
         values.put(KEY_GROUP2, word.getGroup2());
 
-        return db.update(TABLE_WORDS, values, KEY_ID + " = ",
-                new String[] { String.valueOf(word.getId()) });
+        return db.update(TABLE_WORDS, values, KEY_ID + " = '"+word.getId()+"'", null);
     }
 
     // Deleting Word

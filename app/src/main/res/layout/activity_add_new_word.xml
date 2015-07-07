@@ -10,175 +10,211 @@
         layout="@layout/toolbar"/>
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView" >
-
-    </ScrollView>
-
-    <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:baselineAligned="false"
-        android:clickable="false"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/toolbar"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/activity_vertical_margin">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/Label_InputText"
-            android:id="@+id/tv_InputText"
-            android:layout_below="@+id/toolbar"
-
-            android:layout_gravity="center_horizontal" />
-
+        android:id="@+id/sw_addNewWord"
+        android:layout_below="@+id/toolbar">
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_horizontal_margin">
+            android:baselineAligned="false"
+            android:clickable="false"
 
-            <ImageButton
-                android:layout_width="@dimen/flag_width"
-                android:layout_height="@dimen/flag_height"
-                android:id="@+id/ib_PrimaryFlag"
+
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginRight="@dimen/activity_vertical_margin">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/PartsOfSpeech2"
+                    android:id="@+id/textView"
+                    android:layout_gravity="center" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_PartsOfSpeech"
+                    android:spinnerMode="dropdown"
+                    android:prompt="@string/PartsOfSpeech"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:layout_width="@dimen/flag_width"
+                            android:layout_height="@dimen/flag_height"
+                            android:id="@+id/ib_PrimaryFlag"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:layout_gravity="center" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/et_PrimaryWord"
+                            android:hint="@string/Label_Type_Translation"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
+                            android:padding="@dimen/abc_action_bar_overflow_padding_start_material" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:layout_width="@dimen/flag_width"
+                            android:layout_height="@dimen/flag_height"
+                            android:id="@+id/ib_RotateFlags"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:src="@drawable/tumblr_reblog"
+                            android:visibility="invisible" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/et_TranscriptionWord"
+                            android:layout_gravity="center"
+                            android:hint="@string/Label_Transcription"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:layout_marginRight="@dimen/activity_horizontal_margin"
+                            android:padding="@dimen/abc_action_bar_overflow_padding_start_material" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:layout_width="@dimen/flag_width"
+                            android:layout_height="@dimen/flag_height"
+                            android:id="@+id/ib_SecondaryFlag"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/et_SecondaryWord"
+                            android:layout_below="@+id/et_PrimaryWord"
+                            android:hint="@string/Label_Type_Word"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:layout_marginTop="@dimen/activity_horizontal_margin"
+                            android:padding="@dimen/abc_action_bar_overflow_padding_start_material" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/rg_Gender"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:gravity="end">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Label_Gender_Male"
+                        android:id="@+id/rb_Male"
+                        android:singleLine="false"
+                        android:drawableRight="@android:drawable/btn_radio"
+                        android:button="@null"
+                        />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Label_Gender_Female"
+                        android:id="@+id/rb_Female"
+                        android:drawableRight="@android:drawable/btn_radio"
+                        android:button="@null"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Label_Gender_Neuter"
+                        android:id="@+id/rb_Neuter"
+                        android:checked="true"
+                        android:drawableRight="@android:drawable/btn_radio"
+                        android:button="@null"/>
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                 />
+                android:id="@+id/ll_addSameWords">
+
+                <ImageButton
+                    android:layout_width="@dimen/gender_width"
+                    android:layout_height="@dimen/gender_width"
+                    android:id="@+id/ib_AddNewSecondaryWord"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/plus" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/Label_SecondaryWordHint"
+                    android:id="@+id/tv_SecondaryWordHint"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/activity_horizontal_margin"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+            </LinearLayout>
 
             <EditText
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/et_PrimaryWord"
-                android:hint="@string/Label_Type_Translation"
-                android:layout_below="@+id/scrollView"
-                android:layout_alignLeft="@+id/et_SecondaryWord"
-                android:layout_alignStart="@+id/et_SecondaryWord"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/activity_horizontal_margin" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:layout_width="@dimen/flag_width"
-                android:layout_height="@dimen/flag_height"
-                android:id="@+id/ib_RotateFlags"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/et_Notes"
+                android:layout_gravity="center_horizontal"
+                android:lines="2"
+                android:maxLines="6"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:src="@drawable/tumblr_reblog"
-                android:visibility="invisible" />
-
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_TranscriptionWord"
-                android:layout_gravity="center"
-                android:hint="@string/Label_Transcription"
-                android:layout_marginTop="@dimen/activity_horizontal_margin" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:layout_width="@dimen/flag_width"
-                android:layout_height="@dimen/flag_height"
-                android:id="@+id/ib_SecondaryFlag"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_SecondaryWord"
-                android:layout_below="@+id/et_PrimaryWord"
-                android:hint="@string/Label_Type_Word"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:layout_marginTop="@dimen/activity_horizontal_margin" />
+                android:hint="@string/Label_Notes"
+                android:focusableInTouchMode="true"
+                android:padding="@dimen/abc_action_bar_overflow_padding_start_material" />
 
         </LinearLayout>
+    </ScrollView>
 
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinner_PartsOfSpeech"
-            android:layout_gravity="center_horizontal"
-            android:spinnerMode="dropdown"
-            android:prompt="@string/PartsOfSpeech"
-            android:layout_marginTop="@dimen/activity_horizontal_margin" />
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/rg_Gender"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/activity_horizontal_margin">
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Label_Gender_Male"
-                android:id="@+id/rb_Male"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Label_Gender_Female"
-                android:id="@+id/rb_Female"
-                android:layout_weight="1" />
-
-            <RadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Label_Gender_Neuter"
-                android:id="@+id/rb_Neuter"
-                android:layout_weight="1"
-                android:checked="true" />
-        </RadioGroup>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/Label_SecondaryWordHint"
-            android:id="@+id/tv_SecondaryWordHint"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_horizontal_margin" />
-
-        <ImageButton
-            android:layout_width="@dimen/gender_width"
-            android:layout_height="@dimen/gender_width"
-            android:id="@+id/ib_AddNewSecondaryWord"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:src="@drawable/plus" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:ems="10"
-            android:id="@+id/et_Notes"
-            android:layout_gravity="center_horizontal"
-            android:lines="2"
-            android:maxLines="6"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/Label_Notes"
-            android:focusableInTouchMode="true" />
-
-    </LinearLayout>
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fab_addWord"
         android:layout_width="wrap_content"

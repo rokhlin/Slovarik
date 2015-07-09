@@ -32,7 +32,8 @@
     <string name="Label_Add_Word">Add word</string>
     <string name="Label_Edit_Word">Edit word</string>
     <string name="Label_Edit">EDIT</string>
-    <string name="Label_SecondaryWordHint">You can add another meaning of the word, if you press the "+" button.</string>
+    <string name="Label_SecondaryWordHint">You can add another meaning of the word, if you press the [+] button.</string>
+    <string name="Label_Labels3">You can add label for phrase, if you press the [+] button.</string>
     <string name="Label_Notes">Notes</string>
     <string name="Label_Transcription">Type Transcription</string>
     <string name="Label_Gender">Gender</string>

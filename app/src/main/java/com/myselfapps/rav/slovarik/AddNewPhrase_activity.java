@@ -22,12 +22,14 @@ import com.melnykov.fab.FloatingActionButton;
 import java.util.List;
 
 
-public class AddNewPhrase_activity extends AppCompatActivity {
-    private Toolbar mActionBarToolbar;
+public class AddNewPhrase_activity extends AppCompatActivity implements View.OnClickListener {
+    private ImageButton addLabel, addLabel2;
+    private FloatingActionButton fab;
     private Spinner spinner;
     private EditText primary,secondary, notes, transcription,etlabel;
     private TextView tvLabels;
     private Phrase phrase;
+    private boolean pressState = false;
     private DatabaseHandler db;
     private SharedPreferences pref;
     private List<Label> labels;
@@ -55,41 +57,17 @@ public class AddNewPhrase_activity extends AppCompatActivity {
         transcription  = (EditText) findViewById(R.id.et_Transcription_AddPrase);
         notes  = (EditText) findViewById(R.id.et_Notes_AddPrase);
         etlabel  = (EditText) findViewById(R.id.et_labels);
-        tvLabels = (TextView) findViewById(R.id.tv_show_labels);
-
+        tvLabels = (TextView) findViewById(R.id.tv_hint_addNewPhrase);
         setAddedLabels();
 
-        ImageButton ib_PrimaryFlag = (ImageButton) findViewById(R.id.ib_PrimaryFlag_AddPrase);
-        ImageButton ib_SecondaryFlag = (ImageButton) findViewById(R.id.ib_SecondaryFlag_AddPrase);
+        final ImageButton ib_PrimaryFlag = (ImageButton) findViewById(R.id.ib_PrimaryFlag_AddPrase);
+        final ImageButton ib_SecondaryFlag = (ImageButton) findViewById(R.id.ib_SecondaryFlag_AddPrase);
         setFlags(ib_PrimaryFlag, FIRST_LANGUAGE);
         setFlags(ib_SecondaryFlag, SECOND_LANGUAGE);
-        ImageButton addCategory = (ImageButton) findViewById(R.id.ib_AddNewCategory);// реализовать добавление категорий по нажатию
-        addCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Добавить действие
-            }
-        });
-        final ImageButton addLabel = (ImageButton) findViewById(R.id.ib_AddNewLabel);
-        addLabel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String newLabel = etlabel.getText().toString();
-                if (!checkLabel(newLabel) && !newLabel.equals("")){
-                    db.addLabel(new Label(newLabel,pDictionary));
-                }
-
-                if(pLabels != null && !newLabel.equals("")){
-                    pLabels = pLabels +"<->"+newLabel;
-                }
-                else {
-                    pLabels = newLabel;
-                }
-
-                setAddedLabels();
-            }
-        });
+        addLabel = (ImageButton) findViewById(R.id.ib_AddNewLabel);
+        addLabel2 = (ImageButton) findViewById(R.id.ib_AddNewLabel2);
+        addLabel.setOnClickListener(this);
+        addLabel2.setOnClickListener(this);
     }
 
     private void setAddedLabels() {
@@ -97,22 +75,23 @@ public class AddNewPhrase_activity extends AppCompatActivity {
             String[] strings = pLabels.split("<->");
             String str = "[";
             for (String s : strings) {
-                str += s + ", ";
+                if(str.equals("[")) str += s;
+                else str +=", " + s;
             }
-            tvLabels.setText(str+"]");
+            tvLabels.setText(str + "]");
             etlabel.setText("");
         }
     }
 
     private boolean checkLabel(String string) {
-        boolean foundinBase = false;
+        boolean foundInBase = false;
         for (int i = 0; i <labels.size() ; i++) {
             if(labels.get(i).getName().equals(string)){
-                foundinBase = true;
+                foundInBase = true;
                 break;
             }
         }
-        return foundinBase;
+        return foundInBase;
     }
 
 
@@ -184,7 +163,7 @@ public class AddNewPhrase_activity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
 
     }
@@ -195,7 +174,7 @@ public class AddNewPhrase_activity extends AppCompatActivity {
     }
 
     private void initFloatingButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_addPhrase);
+        fab = (FloatingActionButton) findViewById(R.id.fab_addPhrase);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -287,5 +266,45 @@ public class AddNewPhrase_activity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.ib_AddNewLabel:
+                if(pressState){
+                    String newLabel = etlabel.getText().toString();
+                    if (!checkLabel(newLabel) && !newLabel.equals("")){
+                        db.addLabel(new Label(newLabel,pDictionary));
+                    }
+
+                    if(pLabels != null && !newLabel.equals("")){
+                        pLabels = pLabels +"<->"+newLabel;
+                    }
+                    else {
+                        pLabels = newLabel;
+                    }
+
+                    setAddedLabels();
+                    pressState = false;
+                    etlabel.setVisibility(View.GONE);
+                    tvLabels.setVisibility(View.VISIBLE);
+                    fab.setVisibility(View.VISIBLE);
+                    addLabel.setVisibility(View.GONE);
+                    addLabel2.setVisibility(View.VISIBLE);
+
+                }
+                break;
+            case R.id.ib_AddNewLabel2:
+                addLabel2.setVisibility(View.GONE);
+                addLabel.setVisibility(View.VISIBLE);
+                pressState = true;
+                etlabel.setVisibility(View.VISIBLE);
+                etlabel.setFocusable(true);
+                etlabel.requestFocus();
+                tvLabels.setVisibility(View.GONE);
+                fab.setVisibility(View.GONE);
+                break;
+        }
     }
 }

@@ -11,4 +11,5 @@
 
     <dimen name="gender_height">32dp</dimen>
     <dimen name="gender_width">48dp</dimen>
+    <dimen name="project_vertical_medium_padding">6dp</dimen>
 </resources>

@@ -18,12 +18,42 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="1"
+                android:layout_marginLeft="@dimen/project_horizontal_margin"
+                android:layout_marginRight="@dimen/project_horizontal_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/Label_Category2"
+                    android:id="@+id/textView4"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/project_vertical_medium_padding" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_Category"
+                    android:spinnerMode="dropdown"
+                    android:prompt="@string/Label_Category"
+                    android:layout_marginTop="@dimen/project_horizontal_margin"
+                    android:gravity="end" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/project_horizontal_margin"
+                android:layout_marginRight="@dimen/project_horizontal_margin">
 
                 <ImageButton
                     android:layout_width="@dimen/flag_width"
@@ -48,14 +78,15 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/project_horizontal_margin"
+                android:layout_marginRight="@dimen/project_horizontal_margin">
 
                 <ImageButton
                     android:layout_width="@dimen/flag_width"
                     android:layout_height="@dimen/flag_height"
                     android:id="@+id/ib_RotateFlags_AddPrase"
                     android:layout_marginTop="@dimen/project_horizontal_margin"
-                    android:src="@drawable/tumblr_reblog"
                     android:visibility="invisible" />
 
                 <EditText
@@ -74,7 +105,8 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/project_horizontal_margin">
 
                 <ImageButton
                     android:layout_width="@dimen/flag_width"
@@ -84,10 +116,9 @@
                     />
 
                 <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/et_SecondaryPhrase"
-                    android:layout_below="@+id/et_PrimaryWord_AddPrase"
                     android:hint="@string/Label_Type_Translation"
                     android:layout_gravity="center"
                     android:layout_weight="1"
@@ -100,72 +131,51 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:weightSum="1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/Label_Category2"
-                    android:id="@+id/textView4"
-                    android:layout_margin="@dimen/project_horizontal_margin"
-                    android:layout_gravity="center" />
-
-                <Spinner
-                    android:layout_width="153dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/spinner_Category"
-                    android:spinnerMode="dropdown"
-                    android:prompt="@string/Label_Category"
-                    android:layout_marginTop="@dimen/project_horizontal_margin"
-                    android:gravity="end"
-                    android:layout_marginBottom="@dimen/project_horizontal_margin"
-                    android:layout_weight="0.70" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/project_horizontal_margin"
+                android:layout_marginLeft="@dimen/project_horizontal_margin"
+                android:layout_marginRight="@dimen/project_horizontal_margin">
 
                 <ImageButton
                     android:layout_width="@dimen/gender_width"
                     android:layout_height="@dimen/gender_width"
-                    android:id="@+id/ib_AddNewCategory"
+                    android:id="@+id/ib_AddNewLabel2"
                     android:src="@drawable/plus"
-                    android:layout_margin="@dimen/project_horizontal_margin" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/project_horizontal_margin">
+                    android:layout_marginTop="@dimen/project_horizontal_margin" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/Label_Labels2"
-                    android:id="@+id/textView5"
+                    android:text="@string/Label_Labels3"
+                    android:id="@+id/tv_hint_addNewPhrase"
                     android:layout_margin="@dimen/project_horizontal_margin" />
 
                 <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:id="@+id/et_labels"
                     android:hint="@string/Label_Type_Labels"
                     android:layout_weight="1"
-                    />
+                    android:visibility="gone" />
 
                 <ImageButton
                     android:layout_width="@dimen/gender_width"
                     android:layout_height="@dimen/gender_width"
                     android:id="@+id/ib_AddNewLabel"
-                    android:src="@drawable/plus"
-                    android:layout_marginLeft="@dimen/project_horizontal_margin"
-                    android:layout_marginRight="@dimen/project_horizontal_margin" />
+                    android:src="@drawable/check"
+                    android:layout_marginRight="@dimen/project_horizontal_margin"
+                    android:layout_marginTop="@dimen/project_horizontal_margin"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/project_horizontal_margin"
+                android:layout_marginRight="@dimen/project_horizontal_margin">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -177,7 +187,9 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/project_horizontal_margin"
+                android:layout_marginRight="@dimen/project_horizontal_margin">
 
                 <EditText
                     android:layout_width="match_parent"
@@ -185,7 +197,6 @@
                     android:inputType="textMultiLine"
                     android:ems="10"
                     android:id="@+id/et_Notes_AddPrase"
-                    android:layout_margin="@dimen/project_horizontal_margin"
                     android:hint="@string/Label_Notes" />
             </LinearLayout>
 

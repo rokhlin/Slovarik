@@ -19,16 +19,19 @@ import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
 
+import java.util.List;
+
 
 public class AddNewPhrase_activity extends AppCompatActivity {
     private Toolbar mActionBarToolbar;
     private Spinner spinner;
-    private EditText primary,secondary, notes, transcription,addlabel;
-    private TextView labels;
+    private EditText primary,secondary, notes, transcription,etlabel;
+    private TextView tvLabels;
     private Phrase phrase;
     private DatabaseHandler db;
     private SharedPreferences pref;
-
+    private List<Label> labels;
+    private String pLabels = null;
     private String FIRST_LANGUAGE ="IL";
     private String SECOND_LANGUAGE ="RU";
     private String pDictionary = FIRST_LANGUAGE+"-"+SECOND_LANGUAGE+"_"+"PHRASES";
@@ -44,33 +47,85 @@ public class AddNewPhrase_activity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_phrase);
         initToolbar();
         initSpinner();
+        initLabels();
         pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         initFloatingButton();
-
         primary = (EditText) findViewById(R.id.et_PrimaryWord_AddPrase);
         secondary = (EditText) findViewById(R.id.et_SecondaryPhrase);
         transcription  = (EditText) findViewById(R.id.et_Transcription_AddPrase);
         notes  = (EditText) findViewById(R.id.et_Notes_AddPrase);
-        addlabel  = (EditText) findViewById(R.id.et_labels);
-        labels = (TextView) findViewById(R.id.tv_show_labels);
+        etlabel  = (EditText) findViewById(R.id.et_labels);
+        tvLabels = (TextView) findViewById(R.id.tv_show_labels);
+
+        setAddedLabels();
+
         ImageButton ib_PrimaryFlag = (ImageButton) findViewById(R.id.ib_PrimaryFlag_AddPrase);
         ImageButton ib_SecondaryFlag = (ImageButton) findViewById(R.id.ib_SecondaryFlag_AddPrase);
         setFlags(ib_PrimaryFlag, FIRST_LANGUAGE);
         setFlags(ib_SecondaryFlag, SECOND_LANGUAGE);
-        ImageButton addCategory = (ImageButton) findViewById(R.id.ib_AddNewCategory);
+        ImageButton addCategory = (ImageButton) findViewById(R.id.ib_AddNewCategory);// реализовать добавление категорий по нажатию
         addCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Добавить действие
             }
         });
-        ImageButton addLabel = (ImageButton) findViewById(R.id.ib_AddNewLabel);
+        final ImageButton addLabel = (ImageButton) findViewById(R.id.ib_AddNewLabel);
         addLabel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Добавить действие
+
+                String newLabel = etlabel.getText().toString();
+                if (!checkLabel(newLabel) && !newLabel.equals("")){
+                    db.addLabel(new Label(newLabel,pDictionary));
+                }
+
+                if(pLabels != null && !newLabel.equals("")){
+                    pLabels = pLabels +"<->"+newLabel;
+                }
+                else {
+                    pLabels = newLabel;
+                }
+
+                setAddedLabels();
             }
         });
+    }
+
+    private void setAddedLabels() {
+        if(pLabels != null) {
+            String[] strings = pLabels.split("<->");
+            String str = "[";
+            for (String s : strings) {
+                str += s + ", ";
+            }
+            tvLabels.setText(str+"]");
+            etlabel.setText("");
+        }
+    }
+
+    private boolean checkLabel(String string) {
+        boolean foundinBase = false;
+        for (int i = 0; i <labels.size() ; i++) {
+            if(labels.get(i).getName().equals(string)){
+                foundinBase = true;
+                break;
+            }
+        }
+        return foundinBase;
+    }
+
+
+    private void initLabels() {
+        db = new DatabaseHandler(this);
+        if (db.getLabelCount()<=0) {
+            String[] baseLabels = new String[]{"my", "your", "eat", "verb", "exception"};// заменить потом на значения из ресурсов
+            for (String baseLabel : baseLabels) {
+                db.addCategory(new Category(baseLabel));
+            }
+        }
+        labels = db.getAllLabels();
+
     }
 
     @Override
@@ -93,8 +148,20 @@ public class AddNewPhrase_activity extends AppCompatActivity {
     }
 
     private void initSpinner() {
+        db = new DatabaseHandler(this);
+        if (db.getCategoryCount()<=0){
+            String[] baseCategories = new String[]{
+                    getResources().getString(R.string.Base_Category_Unsorted),
+                    getResources().getString(R.string.Base_Category_Answers),
+                    getResources().getString(R.string.Base_Category_Questions),
+                    getResources().getString(R.string.Base_Category_Official),
+                    getResources().getString(R.string.Base_Category_Lingo)};
+            for (String baseCategory : baseCategories) {
+                db.addCategory(new Category(baseCategory));
+            }
+        }
 
-        final String[] spinnerData= {"Set Category","Shopping","Car", "Restaurant"};//Заменить на загрузку из таблицы
+        List<String> spinnerData=  db.getAllNamesOfCategory();
 
         spinner = (Spinner) findViewById(R.id.spinner_Category);
 
@@ -132,21 +199,6 @@ public class AddNewPhrase_activity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (addSecondWord()) {
-//                    try {
-//                        db.addWords(words);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    clearFields();
-//                    for (Word word : words) {
-//                        Log.d("MyLog", "Words: " + word.getId() + " - " + word.getPrimary() + " - " + word.getSecondary());
-//                    }
-//                    Intent intent = new Intent(AddNewWord_activity.this, Dictionary_activity.class);
-//                    startActivity(intent);
-//                }
-
                 if(addPhrase()){
                     try {
                         db = new DatabaseHandler(getApplicationContext());
@@ -176,7 +228,7 @@ public class AddNewPhrase_activity extends AppCompatActivity {
             showAlert(2);
         }
         else {
-            phrase = new Phrase(pPrimary,pTranscription,pSecondary,pCategory,pNotes,pDictionary);
+            phrase = new Phrase(pPrimary,pTranscription,pSecondary,pCategory,pLabels,pNotes,pDictionary);
             res = true;
         }
         return res;

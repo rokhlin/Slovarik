@@ -52,7 +52,11 @@
     <string name="Label_Category2">Category:</string>
     <string name="Label_Type_Labels">Type label name</string>
     <string name="Label_Type_Phrase">Type phrase</string>
-
+    <string name="Base_Category_Unsorted">Unsorted</string>
+    <string name="Base_Category_Questions">Questions</string>
+    <string name="Base_Category_Answers">Answers</string>
+    <string name="Base_Category_Official">Official</string>
+    <string name="Base_Category_Lingo">Lingo</string>
 
     <string name="Alert_dialog_title">Invalid input</string>
     <string name="Alert_dialog_Invalid_Primary">Word must be filled in</string>

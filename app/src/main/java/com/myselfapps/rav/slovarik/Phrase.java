@@ -16,11 +16,12 @@ public class Phrase {
     public Phrase() {
     }
 
-    public Phrase(String primary, String transcription, String secondary, String category, String notes, String dictionary) {
+    public Phrase(String primary, String transcription, String secondary, String category, String label, String notes, String dictionary) {
         Primary = primary;
         Transcription = transcription;
         Secondary = secondary;
         Category = category;
+        Label = label;
         Notes = notes;
         Dictionary = dictionary;
     }

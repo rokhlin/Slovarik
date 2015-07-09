@@ -100,7 +100,8 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:weightSum="1">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -112,14 +113,15 @@
                     android:layout_gravity="center" />
 
                 <Spinner
-                    android:layout_width="204dp"
+                    android:layout_width="153dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinner_Category"
                     android:spinnerMode="dropdown"
                     android:prompt="@string/Label_Category"
                     android:layout_marginTop="@dimen/project_horizontal_margin"
                     android:gravity="end"
-                    android:layout_marginBottom="@dimen/project_horizontal_margin" />
+                    android:layout_marginBottom="@dimen/project_horizontal_margin"
+                    android:layout_weight="0.70" />
 
                 <ImageButton
                     android:layout_width="@dimen/gender_width"
@@ -148,7 +150,8 @@
                     android:layout_height="match_parent"
                     android:id="@+id/et_labels"
                     android:hint="@string/Label_Type_Labels"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    />
 
                 <ImageButton
                     android:layout_width="@dimen/gender_width"
@@ -168,7 +171,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Medium Text"
                     android:id="@+id/tv_show_labels" />
             </LinearLayout>
 

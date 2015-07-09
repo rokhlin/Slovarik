@@ -83,12 +83,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             + KEY_FIELD3 + " TEXT"
             + ")";
 
-    private static final String CREATE_CATEGORY_TABLE = "CREATE VIRTUAL TABLE " + TABLE_CATEGORY + " USING fts3("
+    private static final String CREATE_CATEGORIES_TABLE = "CREATE VIRTUAL TABLE " + TABLE_CATEGORY + " USING fts3("
             + KEY_NAME + " TEXT,"
             + KEY_PHRASE_ID + " TEXT,"
             + KEY_WORD_ID + " TEXT,"
             + KEY_DICTIONARY + " TEXT,"
             + KEY_NOTES + " TEXT,"
+            + KEY_VISIBILITY + " TEXT"
+            + ")";
+
+    private static final String CREATE_LABELS_TABLE = "CREATE VIRTUAL TABLE " + TABLE_LABELS + " USING fts3("
+            + KEY_NAME + " TEXT,"
+            + KEY_GROUP + " TEXT,"
+            + KEY_NOTES + " TEXT,"
+            + KEY_DICTIONARY + " TEXT,"
             + KEY_VISIBILITY + " TEXT"
             + ")";
 
@@ -110,19 +118,495 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_WORDS_TABLE);
         db.execSQL(CREATE_PHRASES_TABLE);
-        db.execSQL(CREATE_CATEGORY_TABLE);
+        db.execSQL(CREATE_CATEGORIES_TABLE);
+        db.execSQL(CREATE_LABELS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_WORDS);
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_PHRASES);
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_CATEGORY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHRASES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LABELS);
         onCreate(db);
-        Log.d("myLog", "--------------------------------Table was created------------------------------");
+        Log.d("myLog", "--------------------------------Tables was created------------------------------");
+
     }
 
+    //***************************************METHODS USING TABLE LABELS*****************************************//
+    // Fill list Label from CURSOR
+    private List<Label> fillLabels(Cursor cursor) {
+        List<Label> labels = new ArrayList<>();
+        do {
+            Label label = new Label();
+            label.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            label.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+            label.setGroup(cursor.getString(cursor.getColumnIndex(KEY_GROUP)));
+            label.setNotes(cursor.getString(cursor.getColumnIndex(KEY_NOTES)));
+            label.setDictionary(cursor.getString(cursor.getColumnIndex(KEY_DICTIONARY)));
+            label.setVisibility(cursor.getString(cursor.getColumnIndex(KEY_VISIBILITY)));
+
+
+            labels.add(label);
+        } while (cursor.moveToNext());
+        return labels;
+    }
+
+    // Fill Label from CURSOR
+    private Label fillLabel(Cursor cursor) {
+        return fillLabels(cursor).get(0);
+    }
+
+    // Add new label
+    public void addLabel(Label label) {
+        Log.d("myLog", "--------------------------------Add label started------------------------------");
+
+        if(!checkDuplicates(label)) {
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, label.getName());
+            values.put(KEY_GROUP, label.getGroup());
+            values.put(KEY_NOTES, label.getNotes());
+            values.put(KEY_DICTIONARY, label.getDictionary());
+            values.put(KEY_VISIBILITY, label.getVisibility());
+
+
+
+            db.insert(TABLE_LABELS, null, values);
+            Log.d("myLog", "--------------------------------Add label finished----------------------------");
+        }
+        else {
+            Log.d("myLog", "--------------------------------Add label aborted, Found Duplicate------------");
+        }
+    }
+
+    private Boolean checkDuplicates(Label label) {
+        boolean res = false;
+        Label w = getLabelByName(label.getName());
+        if( w != null){
+            res = true;
+        }
+        return res;
+    }
+
+    // Getting All Labels
+    public ArrayList<Label> getAllLabels() {
+        Log.d("myLog", "--------------------------------Get All Categoties------------------------------");
+        List<Label> labels = new ArrayList<>();
+        // Select All Query
+        String selectQuery = "SELECT  rowid,* FROM " + TABLE_LABELS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            labels = fillLabels(cursor);
+        }
+        return (ArrayList<Label>)labels;
+    }
+
+    // Getting All Labels
+    public List<String> getAllLabelNames() {
+        Log.d("myLog", "--------------------------------Get All Categoties------------------------------");
+        List<String> labels = new ArrayList<>();
+        // Select All Query
+        String selectQuery = "SELECT name FROM " + TABLE_LABELS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            labels.add(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+        }
+        return labels;
+    }
+
+    // Getting All Names of Label
+    public ArrayList<String> getAllNamesOfLabel() {
+        Log.d("myLog", "--------------------------------Get All Categoties------------------------------");
+        List<Label> labels = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
+        String selectQuery = "SELECT  rowid,* FROM " + TABLE_LABELS;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            labels = fillLabels(cursor);
+        }
+
+        for (Label c : labels){
+            names.add(c.getName());
+        }
+
+        return names;
+
+    }
+    // Getting Label  By ID
+    public Label getLabelByID(int id) {
+        Log.d("myLog", "--------------------------------Getting Label  By ID = "+id+"------------------------------");
+        Label label = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        selection = id+"";
+        selectionArgs = new String[] { selection };
+
+        query ="SELECT rowid,* FROM " + TABLE_LABELS + " WHERE "+KEY_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        // looping through all rows and adding to list
+        Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
+        if (cursor.moveToFirst()) {
+            label = fillLabel(cursor);
+
+        }
+        return label;
+    }
+
+    // Getting Label  By Name
+    public Label getLabelByName(String name) {
+        Log.d("myLog", "--------------------------------Getting Label  By Name = "+name+"------------------------------");
+        Label label = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        selectionArgs = new String[] { name };
+
+        query ="SELECT rowid,* FROM " + TABLE_LABELS + " WHERE "+KEY_NAME + " = ?";
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
+        if (cursor.moveToFirst()) {
+            label = fillLabel(cursor);
+        }
+        return label;
+    }
+
+    // Getting Label  By Phrase_ID
+    public Label getLabelByPhraseID(String phrase_id) {
+        Log.d("myLog", "--------------------------------Getting Label  By phrase_id = "+phrase_id+"------------------------------");
+        Label label = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        selectionArgs = new String[] { phrase_id };
+
+        query ="SELECT rowid,* FROM " + TABLE_LABELS + " WHERE "+KEY_PHRASE_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
+        if (cursor.moveToFirst()) {
+            label = fillLabel(cursor);
+        }
+        return label;
+    }
+
+    // Getting Label  By Word_ID
+    public Label getLabelByWordID(String word_id) {
+        Log.d("myLog", "--------------------------------Getting Label  By phrase_id = "+word_id+"------------------------------");
+        Label label = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        selectionArgs = new String[] { word_id };
+
+        query ="SELECT rowid,* FROM " + TABLE_LABELS + " WHERE "+KEY_WORD_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
+        if (cursor.moveToFirst()) {
+            label = fillLabel(cursor);
+        }
+        return label;
+    }
+
+    // Updating single label
+    public int updateLabel(Label label) {
+        Log.d("myLog", "--------------------------------Update label------------------------------");
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, label.getName());
+        values.put(KEY_GROUP, label.getGroup());
+        values.put(KEY_NOTES, label.getNotes());
+        values.put(KEY_DICTIONARY, label.getDictionary());
+        values.put(KEY_VISIBILITY, label.getVisibility());
+
+        return db.update(TABLE_LABELS, values, KEY_ID + " = '"+label.getId()+"'", null);
+    }
+
+    // Deleting Label by id
+    public void deleteLabel(int id) {
+        Log.d("myLog", "--------------------------------Delete Label------------------------------");
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            query = KEY_ID + " = ?";
+            selectionArgs = new String[]{(id+"")};
+            int res = db.delete(TABLE_LABELS, query, selectionArgs);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        db.close();
+    }
+
+    // Getting Label Count
+    public int getLabelCount() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Log.d("myLog", "--------------------------------Get Words Count------------------------------");
+        String countQuery = "SELECT  rowid, * FROM " + TABLE_LABELS;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int res = cursor.getCount();
+        cursor.close();
+
+        return res;
+    }
+
+    // FTS Search Labels by STRING
+    public List<Label> searchLabels(String searchStr) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Label> labels = new ArrayList<>();
+        Cursor cursor = null;
+
+        selection = KEY_NAME + " MATCH '"+ searchStr + "*'";
+
+        try{
+            cursor = db.query(true, TABLE_LABELS, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+
+            if(cursor!= null && cursor.moveToFirst()){
+                labels = fillLabels(cursor);
+            }
+        }catch(Exception e){
+            Log.e("myLog", "An error occurred while searching for "+searchStr+": "+e.toString(), e);
+        }finally{
+            if(cursor!=null && !cursor.isClosed()){
+                cursor.close();
+            }
+        }
+
+        return labels;
+    }
+
+
+
     //***************************************METHODS USING TABLE CATEGORY*****************************************//
+    // Fill list Category from CURSOR
+    private List<Category> fillCategories(Cursor cursor) {
+        List<Category> categories = new ArrayList<>();
+        do {
+            Category category = new Category();
+            category.setId(cursor.getString(cursor.getColumnIndex(KEY_ID)));
+            category.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));
+            category.setPhrase_id(cursor.getString(cursor.getColumnIndex(KEY_PHRASE_ID)));
+            category.setWord_id(cursor.getString(cursor.getColumnIndex(KEY_WORD_ID)));
+            category.setNotes(cursor.getString(cursor.getColumnIndex(KEY_NOTES)));
+            category.setDictionary(cursor.getString(cursor.getColumnIndex(KEY_DICTIONARY)));
+            category.setVisibility(cursor.getString(cursor.getColumnIndex(KEY_VISIBILITY)));
+
+
+            categories.add(category);
+        } while (cursor.moveToNext());
+        return categories;
+    }
+
+    // Fill Category from CURSOR
+    private Category fillCategory(Cursor cursor) {
+        return fillCategories(cursor).get(0);
+    }
+
+    // Add new category
+    public void addCategory(Category category) {
+        Log.d("myLog", "--------------------------------Add category started------------------------------");
+
+        if(!checkDuplicates(category)) {
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(KEY_NAME, category.getName());
+            values.put(KEY_PHRASE_ID, category.getPhrase_id());
+            values.put(KEY_WORD_ID, category.getWord_id());
+            values.put(KEY_NOTES, category.getNotes());
+            values.put(KEY_DICTIONARY, category.getDictionary());
+            values.put(KEY_VISIBILITY, category.getVisibility());
+
+
+
+            db.insert(TABLE_CATEGORY, null, values);
+            Log.d("myLog", "--------------------------------Add category finished----------------------------");
+        }
+        else {
+            Log.d("myLog", "--------------------------------Add category aborted, Found Duplicate------------");
+        }
+    }
+
+    private Boolean checkDuplicates(Category category) {
+        boolean res = false;
+        Category w = getCategoryByName(category.getName());
+        if( w != null){
+            res = true;
+        }
+        return res;
+    }
+
+    // Getting All Categories
+    public List<Category> getAllCategories() {
+        Log.d("myLog", "--------------------------------Get All Categoties------------------------------");
+        List<Category> categories = new ArrayList<>();
+        // Select All Query
+        String selectQuery = "SELECT  rowid,* FROM " + TABLE_CATEGORY;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            categories = fillCategories(cursor);
+        }
+        return categories;
+    }
+
+    // Getting All Names of Category
+    public ArrayList<String> getAllNamesOfCategory() {
+        Log.d("myLog", "--------------------------------Get All Categoties------------------------------");
+        List<Category> categories = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
+        String selectQuery = "SELECT  rowid,* FROM " + TABLE_CATEGORY;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            categories = fillCategories(cursor);
+        }
+
+        for (Category c : categories){
+            names.add(c.getName());
+        }
+
+        return names;
+
+    }
+    // Getting Category  By ID
+    public Category getCategoryByID(int id) {
+        Log.d("myLog", "--------------------------------Getting Category  By ID = "+id+"------------------------------");
+        Category category = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        selection = id+"";
+        selectionArgs = new String[] { selection };
+
+        query ="SELECT rowid,* FROM " + TABLE_CATEGORY + " WHERE "+KEY_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+        // looping through all rows and adding to list
+        Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
+        if (cursor.moveToFirst()) {
+            category = fillCategory(cursor);
+
+        }
+        return category;
+    }
+
+    // Getting Category  By Name
+    public Category getCategoryByName(String name) {
+        Log.d("myLog", "--------------------------------Getting Category  By Name = "+name+"------------------------------");
+        Category category = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        selectionArgs = new String[] { name };
+
+        query ="SELECT rowid,* FROM " + TABLE_CATEGORY + " WHERE "+KEY_NAME + " = ?";
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
+        if (cursor.moveToFirst()) {
+            category = fillCategory(cursor);
+        }
+        return category;
+    }
+
+    // Getting Category  By Phrase_ID
+    public Category getCategoryByPhraseID(String phrase_id) {
+        Log.d("myLog", "--------------------------------Getting Category  By phrase_id = "+phrase_id+"------------------------------");
+        Category category = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        selectionArgs = new String[] { phrase_id };
+
+        query ="SELECT rowid,* FROM " + TABLE_CATEGORY + " WHERE "+KEY_PHRASE_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
+        if (cursor.moveToFirst()) {
+            category = fillCategory(cursor);
+        }
+        return category;
+    }
+
+    // Getting Category  By Word_ID
+    public Category getCategoryByWordID(String word_id) {
+        Log.d("myLog", "--------------------------------Getting Category  By phrase_id = "+word_id+"------------------------------");
+        Category category = null;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        selectionArgs = new String[] { word_id };
+
+        query ="SELECT rowid,* FROM " + TABLE_CATEGORY + " WHERE "+KEY_WORD_ID + " = ?";
+        Cursor cursor = db.rawQuery(query, selectionArgs);
+
+        Log.d("myLog", "--------------------------------cursor.getCount() = " + cursor.getCount() + "------------------------------");
+        if (cursor.moveToFirst()) {
+            category = fillCategory(cursor);
+        }
+        return category;
+    }
+
+    // Updating single category
+    public int updateCategory(Category category) {
+        Log.d("myLog", "--------------------------------Update category------------------------------");
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, category.getName());
+        values.put(KEY_PHRASE_ID, category.getPhrase_id());
+        values.put(KEY_WORD_ID, category.getWord_id());
+        values.put(KEY_NOTES, category.getNotes());
+        values.put(KEY_DICTIONARY, category.getDictionary());
+        values.put(KEY_VISIBILITY, category.getVisibility());
+
+        return db.update(TABLE_CATEGORY, values, KEY_ID + " = '"+category.getId()+"'", null);
+    }
+
+    // Deleting Category by id
+    public void deleteCategory(int id) {
+        Log.d("myLog", "--------------------------------Delete Category------------------------------");
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            query = KEY_ID + " = ?";
+            selectionArgs = new String[]{(id+"")};
+            int res = db.delete(TABLE_CATEGORY, query, selectionArgs);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        db.close();
+    }
+
+    // Getting Category Count
+    public int getCategoryCount() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Log.d("myLog", "--------------------------------Get Words Count------------------------------");
+        String countQuery = "SELECT  rowid, * FROM " + TABLE_CATEGORY;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int res = cursor.getCount();
+        cursor.close();
+
+        return res;
+    }
+
+
+
+
 
 
     //***************************************METHODS USING TABLE PHRASES*****************************************//

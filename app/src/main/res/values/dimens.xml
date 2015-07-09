@@ -1,8 +1,10 @@
 <resources>
 
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="activity_margin_betweenElements">24dp</dimen>
+    <dimen name="project_horizontal_margin">16dp</dimen>
+    <dimen name="project_vertical_margin">16dp</dimen>
+    <dimen name="project_margin_betweenElements">24dp</dimen>
+    <dimen name="project_horizontal_padding">4dp</dimen>
+    <dimen name="project_vertical_padding">4dp</dimen>
 
     <dimen name="flag_width">48dp</dimen>
     <dimen name="flag_height">36dp</dimen>

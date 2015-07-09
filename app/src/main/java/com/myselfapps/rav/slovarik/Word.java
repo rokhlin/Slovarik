@@ -1,8 +1,5 @@
 package com.myselfapps.rav.slovarik;
 
-/**
- * Created by Антон on 10.06.2015.
- */
 public class Word {
     private String Id;
     private String Primary;
@@ -15,6 +12,78 @@ public class Word {
     private String Picture = "";
     private String Group1 = "";
     private String Group2 = "";
+    private String Dictionary = "";
+    private String PluralForm = "";
+    private String Exception = "";
+    private String Field1 = "";
+    private String Field2 = "";
+    private String Field3 = "";
+    private String Field4 = "";
+    private String Field5 = "";
+
+    public String getDictionary() {
+        return Dictionary;
+    }
+
+    public void setDictionary(String dictionary) {
+        Dictionary = dictionary;
+    }
+
+    public String getPluralForm() {
+        return PluralForm;
+    }
+
+    public void setPluralForm(String pluralForm) {
+        PluralForm = pluralForm;
+    }
+
+    public String getException() {
+        return Exception;
+    }
+
+    public void setException(String exception) {
+        Exception = exception;
+    }
+
+    public String getField1() {
+        return Field1;
+    }
+
+    public void setField1(String field1) {
+        Field1 = field1;
+    }
+
+    public String getField2() {
+        return Field2;
+    }
+
+    public void setField2(String field2) {
+        Field2 = field2;
+    }
+
+    public String getField3() {
+        return Field3;
+    }
+
+    public void setField3(String field3) {
+        Field3 = field3;
+    }
+
+    public String getField4() {
+        return Field4;
+    }
+
+    public void setField4(String field4) {
+        Field4 = field4;
+    }
+
+    public String getField5() {
+        return Field5;
+    }
+
+    public void setField5(String field5) {
+        Field5 = field5;
+    }
 
     public String getId() {
         return Id;

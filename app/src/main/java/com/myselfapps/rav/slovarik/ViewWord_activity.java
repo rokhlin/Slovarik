@@ -19,7 +19,7 @@ import android.widget.TextView;
 import java.util.List;
 
 
-public class ViewWord extends AppCompatActivity implements View.OnClickListener {
+public class ViewWord_activity extends AppCompatActivity implements View.OnClickListener {
     private SharedPreferences pref;
     private DatabaseHandler db;
     private Word word;
@@ -200,7 +200,7 @@ public class ViewWord extends AppCompatActivity implements View.OnClickListener 
             case R.id.ib_viewWord_delete:
                 db.deleteWord(selected_ID);
 
-                intent = new Intent(ViewWord.this, Dictionary_activity.class);
+                intent = new Intent(ViewWord_activity.this, Dictionary_activity.class);
                 startActivity(intent);
                 break;
             case R.id.ib_viewWord_edit:

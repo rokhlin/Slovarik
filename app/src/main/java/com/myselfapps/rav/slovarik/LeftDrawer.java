@@ -41,18 +41,28 @@ public class LeftDrawer {
                 .addDrawerItems(
                         new PrimaryDrawerItem()
                                 .withIdentifier(1)
-                                .withName(R.string.menu_drawer_item_Dictionary),
+                                .withName(R.string.menu_drawer_item_Dictionary)
+                                .withBadge(getWordsCount()),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem()
+                                .withName(R.string.menu_drawer_item_Phrases)
+                                .withIdentifier(2),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem()
                                 .withName(R.string.menu_drawer_item_Verbs)
-                                .withIdentifier(2),
+                                .withIdentifier(10),
                         new SecondaryDrawerItem()
                                 .withName(R.string.menu_drawer_item_AboutUs)
-                                .withIdentifier(3)
+                                .withIdentifier(11)
                 )
                 .withOnDrawerItemClickListener((Drawer.OnDrawerItemClickListener)currentActivity)
                 .build();
 
+    }
+
+    private String getWordsCount() {
+        DatabaseHandler db = new DatabaseHandler(currentActivity);
+        return db.getWordsCount()+"";
     }
 
     public void initAccountHeader(Activity activity) {

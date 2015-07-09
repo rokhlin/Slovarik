@@ -24,7 +24,7 @@ public class RecyclerViewWordAdapter extends RecyclerView.Adapter<RecyclerViewWo
 
     @Override
     public void onBindViewHolder(WordViewHolder holder, int position) {
-        WordViewHolder.firstName.setText(words.get(position).getId()+" - "+words.get(position).getPrimary());
+        WordViewHolder.firstName.setText(words.get(position).getId()+" - "+words.get(position).getPrimary());//Убрать по завершении
         WordViewHolder.translation.setText(words.get(position).getSecondary());
         WordViewHolder.transcription.setText("[" + words.get(position).getTranscription() + "]");
         WordViewHolder.gender.setText(words.get(position).getGender());
@@ -57,7 +57,7 @@ public class RecyclerViewWordAdapter extends RecyclerView.Adapter<RecyclerViewWo
 
             cv = (CardView) itemView.findViewById(R.id.cv);
 
-            firstName = (TextView) itemView.findViewById(R.id.tv_card_MainWord);
+            firstName = (TextView) itemView.findViewById(R.id.tv_primary_phrases_card);
             translation = (TextView) itemView.findViewById(R.id.tv_card_Translation);
             transcription = (TextView) itemView.findViewById(R.id.tv_card_Transcription);
             gender = (TextView) itemView.findViewById(R.id.tv_card_Gender);
@@ -71,7 +71,7 @@ public class RecyclerViewWordAdapter extends RecyclerView.Adapter<RecyclerViewWo
                     try {
                         Context context = v.getContext();
                         id = (TextView) v.findViewById(R.id.tv_card_id);
-                        Intent intent = new Intent(context, ViewWord.class);
+                        Intent intent = new Intent(context, ViewWord_activity.class);
                         intent.putExtra("selected_ID", id.getText().toString());
                         context.startActivity(intent);
                     }

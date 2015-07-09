@@ -5,17 +5,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.support.v7.widget.SearchView;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.mikepenz.materialdrawer.Drawer;
@@ -24,19 +23,20 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.List;
 
 
-public class Dictionary_activity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener{
-    private enum SortingParameter{
+public class PhrasesDictionary_activity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
+    private enum SortingParameter {
         primary_parameter, translation
     }
+
     SearchManager manager;
-    private LeftDrawer leftDrawer;
     private RecyclerView rv;
     private SharedPreferences pref;
     private int Statecount = 0;
     public SearchView searchView;
+    private LeftDrawer leftDrawer;
 
-    private String FIRST_LANGUAGE ="IL";
-    private String SECOND_LANGUAGE ="RU";
+    private String FIRST_LANGUAGE = "IL";
+    private String SECOND_LANGUAGE = "RU";
     private String SORT_PARAM = String.valueOf(SortingParameter.primary_parameter);
 
     public static final String PREFS_NAME = "SLOVARIK_PREFS";
@@ -49,21 +49,22 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dictionary);
+        setContentView(R.layout.activity_phrases_dictionary);
         init();
+        populatePhrases(SORT_PARAM);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        populateWords(SORT_PARAM);
+        populatePhrases(SORT_PARAM);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         readPreferences();
-        populateWords(SORT_PARAM);
+        populatePhrases(SORT_PARAM);
     }
 
     @Override
@@ -76,37 +77,6 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
     protected void onStop() {
         super.onStop();
         savePreferences();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dictionary, menu);
-        manager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        MenuItem menuItem = menu.findItem(R.id.action_searc);
-        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextChange(final String query) {
-                if (query == null || query.equals("")) {
-                    populateWords(SORT_PARAM);
-                } else {
-                    populateWords(query);
-                }
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextSubmit(final String query) {
-                if (searchView.isActivated() && query.equals("")) {
-                    populateWords(SORT_PARAM);
-                } else {
-                    populateWords(query);
-                }
-                return true;
-            }
-        });
-        return true;
     }
 
     @Override
@@ -156,17 +126,28 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
         }
     }
 
-    /**************** Action Drawer *******************/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_phrases_dictionary_activity, menu);
+        return true;
+    }
+
+
+
+    /**
+     * ************* Action Drawer ******************
+     */
     @Override
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
         Intent intent;
-        switch (i){
+        switch (i) {
             case 1:
-                populateWords(SORT_PARAM);
+                intent = new Intent(PhrasesDictionary_activity.this, Dictionary_activity.class);
+                startActivity(intent);
                 break;
             case 2:
-                intent = new Intent(Dictionary_activity.this, PhrasesDictionary_activity.class);
-                startActivity(intent);
+                populatePhrases(SORT_PARAM);
                 break;
 
         }
@@ -174,10 +155,12 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
         return true;
     }
 
-    /**************** Toolbar Menu *******************/
+    /**
+     * ************* Toolbar Menu ******************
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.change_language:
                 //сменa языка
                 String s = FIRST_LANGUAGE;
@@ -186,37 +169,18 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
 
                 Log.d("myLog", "-------Language changed: " + FIRST_LANGUAGE + "-" + SECOND_LANGUAGE + "--------");
 
-                if(SORT_PARAM.equals(String.valueOf(SortingParameter.translation))){
+                if (SORT_PARAM.equals(String.valueOf(SortingParameter.translation))) {
                     SORT_PARAM = String.valueOf(SortingParameter.primary_parameter);
-                }
-                else {
+                } else {
                     SORT_PARAM = String.valueOf(SortingParameter.translation);
                 }
-                populateWords(SORT_PARAM);
+                populatePhrases(SORT_PARAM);
                 break;
 
         }
 
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void populateWords(String parameter) {
-        /**************** Init DATABASE *******************/
-        DatabaseHandler db = new DatabaseHandler(this);
-        List<Word> words;
-        if(parameter.equals(SORT_PARAM)){
-            words = db.getAllWordsSortBy(parameter);
-        }
-        else {
-            words = db.search(parameter);
-        }
-
-        RecyclerViewWordAdapter adapter = new RecyclerViewWordAdapter(words);
-        rv.setAdapter(adapter);
-
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
     }
 
     private void init() {
@@ -228,10 +192,10 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
         setSupportActionBar(mActionBarToolbar);
 
         /**************** Init ActionDrawer *******************/
-        leftDrawer = new LeftDrawer(mActionBarToolbar,this);
+        leftDrawer = new LeftDrawer(mActionBarToolbar, this);
 
         /**************** Init Recycler View *******************/
-        rv = (RecyclerView)findViewById(R.id.rv);
+        rv = (RecyclerView) findViewById(R.id.rv2);
 
         /**************** Init Floating Action Button *******************/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -239,11 +203,23 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Dictionary_activity.this, AddNewWord_activity.class);
+                Intent intent = new Intent(PhrasesDictionary_activity.this, AddNewPhrase_activity.class);
                 startActivity(intent);
             }
         });
     }
+
+    private void populatePhrases(String parameter) {
+        /**************** Init DATABASE *******************/
+        DatabaseHandler db = new DatabaseHandler(this);
+        List<Phrase> phrases = db.getAllPhrases();
+
+        RvPhrasesAdapter adapter = new RvPhrasesAdapter(phrases);
+        rv.setAdapter(adapter);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+    }
+
 
     private void savePreferences() {
         Log.d("Mylog", "----------------------------Save changes-----------------------------");
@@ -261,8 +237,5 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
         SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, "RU");
         SORT_PARAM = pref.getString(PREFS_SORT_PARAM, String.valueOf(SortingParameter.primary_parameter));
     }
-
-
-
 
 }

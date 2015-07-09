@@ -54,7 +54,7 @@ public class EditWord_activity extends AppCompatActivity implements Drawer.OnDra
         setContentView(R.layout.activity_add_new_word);
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.ll_addSameWords);
         linearLayout.setVisibility(View.GONE);
-        primaryWord = (EditText) findViewById(R.id.et_PrimaryWord);
+        primaryWord = (EditText) findViewById(R.id.et_PrimaryWord_AddPrase);
         secondaryWord = (EditText) findViewById(R.id.et_SecondaryWord);
         transcriptionWord  = (EditText) findViewById(R.id.et_TranscriptionWord);
         secondaryWords = (TextView) findViewById(R.id.tv_SecondaryWordHint);
@@ -124,7 +124,7 @@ public class EditWord_activity extends AppCompatActivity implements Drawer.OnDra
 
                     db.updateWord(word);
 
-                    Intent intent = new Intent(EditWord_activity.this, ViewWord.class);
+                    Intent intent = new Intent(EditWord_activity.this, ViewWord_activity.class);
                     intent.putExtra("selected_ID", word.getId());
                     startActivity(intent);
                 }

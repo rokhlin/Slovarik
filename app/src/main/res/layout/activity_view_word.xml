@@ -28,14 +28,14 @@
 
 
             android:layout_gravity="center"
-            android:layout_margin="@dimen/activity_horizontal_margin" />
+            android:layout_margin="@dimen/project_horizontal_margin" />
 
         <LinearLayout
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ll_viewWord_hiddenEditBottons"
-            android:padding="@dimen/activity_horizontal_margin"
+            android:padding="@dimen/project_horizontal_margin"
             android:layout_gravity="center_horizontal"
             android:visibility="gone">
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/ib_viewWord_edit"
             android:src="@drawable/edit"
-            android:padding="@dimen/activity_horizontal_margin" />
+            android:padding="@dimen/project_horizontal_margin" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -52,16 +52,16 @@
             android:id="@+id/ib_viewWord_delete"
             android:layout_gravity="center"
             android:src="@drawable/delete"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin" />
+            android:padding="@dimen/project_horizontal_margin"
+            android:layout_marginLeft="@dimen/project_horizontal_margin"
+            android:layout_marginRight="@dimen/project_horizontal_margin" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ib_viewWord_cancel"
             android:src="@drawable/close"
-            android:padding="@dimen/activity_horizontal_margin" />
+            android:padding="@dimen/project_horizontal_margin" />
     </LinearLayout>
 
     <TextView
@@ -75,7 +75,7 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_margin="@dimen/project_horizontal_margin"
             android:layout_gravity="center">
 
             <TextView
@@ -145,7 +145,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_viewWord_notes"
-        android:layout_margin="@dimen/activity_horizontal_margin" />
+        android:layout_margin="@dimen/project_horizontal_margin" />
 
 
         <TextView
@@ -155,8 +155,8 @@
         android:text="@string/Label_SameWords"
         android:id="@+id/tv_viewWord_labelSameWords"
 
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_horizontal_margin" />
+            android:layout_marginLeft="@dimen/project_horizontal_margin"
+            android:layout_marginTop="@dimen/project_horizontal_margin" />
 
         <ListView
             android:layout_width="match_parent"

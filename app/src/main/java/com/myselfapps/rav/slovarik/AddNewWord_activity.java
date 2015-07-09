@@ -51,12 +51,11 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_word);
         initToolbar();
-        //leftDrawer = new LeftDrawer(mActionBarToolbar,this);
         pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         initFloatingButton();
 
 
-        primaryWord = (EditText) findViewById(R.id.et_PrimaryWord);
+        primaryWord = (EditText) findViewById(R.id.et_PrimaryWord_AddPrase);
         secondaryWord = (EditText) findViewById(R.id.et_SecondaryWord);
         transcriptionWord  = (EditText) findViewById(R.id.et_TranscriptionWord);
         secondaryWords = (TextView) findViewById(R.id.tv_SecondaryWordHint);
@@ -233,23 +232,33 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
                                        int position, long id) {
 
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
             }
         });
     }
 
-
-    @Override
-    public void onBackPressed(){
-            super.onBackPressed();
-    }
-
-
     private void initToolbar() {
         mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
 
+    }
+
+    private void clearFields() {
+        primaryWord.setText("");
+        transcriptionWord.setText("");
+        secondaryWord.setText("");
+        notes.setText("");
+        secondaryWords.setText(String.valueOf(R.string.Label_SecondaryWordHint));
+        rg1.check(R.id.rb_Neuter);
+        spinner3.setSelection(0);
+
+    }
+
+    @Override
+    public void onBackPressed(){
+            super.onBackPressed();
     }
 
     @Override
@@ -270,17 +279,6 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
                 break;
         }
         return true;
-    }
-
-    private void clearFields() {
-        primaryWord.setText("");
-        transcriptionWord.setText("");
-        secondaryWord.setText("");
-        notes.setText("");
-        secondaryWords.setText(String.valueOf(R.string.Label_SecondaryWordHint));
-        rg1.check(R.id.rb_Neuter);
-        spinner3.setSelection(0);
-
     }
 
     @Override

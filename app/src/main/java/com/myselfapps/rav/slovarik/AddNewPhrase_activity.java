@@ -36,11 +36,12 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
     private String pLabels = null;
     private String FIRST_LANGUAGE ="IL";
     private String SECOND_LANGUAGE ="RU";
-    private String pDictionary = FIRST_LANGUAGE+"-"+SECOND_LANGUAGE+"_"+"PHRASES";
 
+    private String DEFAULT_TABLE = "IL-RU_PHRASES";
     public static final String PREFS_NAME = "SLOVARIK_PREFS";
     public static final String PREFS_FIRST_LANGUAGE = "FIRST_LANGUAGE";
     public static final String PREFS_SECOND_LANGUAGE = "SECOND_LANGUAGE";
+    public static final String PREFS_DEFAULT_TABLE = "DEFAULT_TABLE";
 
 
     @Override
@@ -51,6 +52,7 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
         initSpinner();
         initLabels();
         pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        readPreferences();
         initFloatingButton();
         primary = (EditText) findViewById(R.id.et_PrimaryWord_AddPrase);
         secondary = (EditText) findViewById(R.id.et_SecondaryPhrase);
@@ -100,7 +102,7 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
         if (db.getLabelCount()<=0) {
             String[] baseLabels = new String[]{"my", "your", "eat", "verb", "exception"};// заменить потом на значения из ресурсов
             for (String baseLabel : baseLabels) {
-                db.addCategory(new Category(baseLabel));
+                db.addCategory(new Category(baseLabel));//?????
             }
         }
         labels = db.getAllLabels();
@@ -171,6 +173,7 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
     private void readPreferences() {
         FIRST_LANGUAGE = pref.getString(PREFS_FIRST_LANGUAGE, null);
         SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, null);
+        DEFAULT_TABLE = pref.getString(PREFS_DEFAULT_TABLE, "IL-RU_PHRASES");
     }
 
     private void initFloatingButton() {
@@ -195,11 +198,11 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
 
     private boolean addPhrase() {
         boolean res = false;
-        String pPrimary = primary.getText().toString();
-        String pTranscription = transcription.getText().toString();
-        String pSecondary = secondary.getText().toString();
-        String pNotes = notes.getText().toString();
-        String pCategory = spinner.getSelectedItem().toString();
+        String pPrimary = primary.getText().toString().trim().toLowerCase();
+        String pTranscription = transcription.getText().toString().trim().toLowerCase();
+        String pSecondary = secondary.getText().toString().trim().toLowerCase();
+        String pNotes = notes.getText().toString().trim().toLowerCase();
+        String pCategory = spinner.getSelectedItem().toString().trim().toLowerCase();
         if(pPrimary.equals("")){
             showAlert(1);
         }
@@ -207,7 +210,7 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
             showAlert(2);
         }
         else {
-            phrase = new Phrase(pPrimary,pTranscription,pSecondary,pCategory,pLabels,pNotes,pDictionary);
+            phrase = new Phrase(pPrimary,pTranscription,pSecondary,pCategory,pLabels,pNotes,DEFAULT_TABLE);
             res = true;
         }
         return res;
@@ -273,9 +276,9 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
         switch (v.getId()){
             case R.id.ib_AddNewLabel:
                 if(pressState){
-                    String newLabel = etlabel.getText().toString();
+                    String newLabel = etlabel.getText().toString().trim();
                     if (!checkLabel(newLabel) && !newLabel.equals("")){
-                        db.addLabel(new Label(newLabel,pDictionary));
+                        db.addLabel(new Label(newLabel,DEFAULT_TABLE));
                     }
 
                     if(pLabels != null && !newLabel.equals("")){

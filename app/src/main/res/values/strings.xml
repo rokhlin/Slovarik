@@ -28,7 +28,7 @@
 
     <string name="Label_InputText">Input Your Word</string>
     <string name="Label_Search">Search</string>
-    <string name="Label_Change_language">Change language</string>
+    <string name="Label_Change_language">Change sort method</string>
     <string name="Label_Add_Word">Add word</string>
     <string name="Label_Edit_Word">Edit word</string>
     <string name="Label_Edit">EDIT</string>
@@ -67,4 +67,5 @@
     <string name="title_activity_edit_word_activity">Edit Word</string>
     <string name="title_activity_phrases_dictionary_activity">Phrases Dictionary</string>
     <string name="title_activity_add_new_phrase_activity">Add New Phrase</string>
+    <string name="title_activity_view_prase">Prase</string>
 </resources>

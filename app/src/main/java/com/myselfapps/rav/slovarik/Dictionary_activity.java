@@ -38,7 +38,7 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
     private String FIRST_LANGUAGE ="IL";
     private String SECOND_LANGUAGE ="RU";
     private String SORT_PARAM = String.valueOf(SortingParameter.primary_parameter);
-
+    private String DEFAULT_TABLE = "IL_RU";
     public static final String PREFS_NAME = "SLOVARIK_PREFS";
     public static final String PREFS_FIRST_LANGUAGE = "FIRST_LANGUAGE";
     public static final String PREFS_SECOND_LANGUAGE = "SECOND_LANGUAGE";
@@ -160,9 +160,10 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
     @Override
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
         Intent intent;
-        switch (i){
+        switch (iDrawerItem.getIdentifier()){
             case 1:
                 populateWords(SORT_PARAM);
+
                 break;
             case 2:
                 intent = new Intent(Dictionary_activity.this, PhrasesDictionary_activity.class);
@@ -209,7 +210,7 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
             words = db.getAllWordsSortBy(parameter);
         }
         else {
-            words = db.search(parameter);
+            words = db.search(parameter.trim().toLowerCase());
         }
 
         RecyclerViewWordAdapter adapter = new RecyclerViewWordAdapter(words);
@@ -251,7 +252,7 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
         editor.putString(PREFS_FIRST_LANGUAGE, FIRST_LANGUAGE);
         editor.putString(PREFS_SECOND_LANGUAGE, SECOND_LANGUAGE);
         editor.putString(PREFS_SORT_PARAM, SORT_PARAM);
-
+        editor.putString(PREFS_DEFAULT_TABLE, DEFAULT_TABLE);
         editor.apply();
     }
 
@@ -260,6 +261,7 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
         FIRST_LANGUAGE = pref.getString(PREFS_FIRST_LANGUAGE, "IL");
         SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, "RU");
         SORT_PARAM = pref.getString(PREFS_SORT_PARAM, String.valueOf(SortingParameter.primary_parameter));
+        DEFAULT_TABLE = pref.getString(PREFS_DEFAULT_TABLE, "IL_RU");
     }
 
 

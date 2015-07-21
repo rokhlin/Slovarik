@@ -71,7 +71,7 @@ public class RvPhrasesAdapter extends RecyclerView.Adapter<RvPhrasesAdapter.Phra
                     try {
                         Context context = v.getContext();
                         id = (TextView) v.findViewById(R.id.tv_id_phrases_card);
-                        Intent intent = new Intent(context, ViewWord_activity.class);
+                        Intent intent = new Intent(context, ViewPhrase_activity.class);
                         intent.putExtra("selected_ID", id.getText().toString());
                         context.startActivity(intent);
                     }

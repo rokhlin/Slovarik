@@ -52,6 +52,7 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         setContentView(R.layout.activity_add_new_word);
         initToolbar();
         pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        readPreferences();
         initFloatingButton();
 
 
@@ -69,7 +70,7 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         addSecondaryWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addSecondWord();
+                addSecondWord(v);
             }
         });
 
@@ -84,8 +85,8 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(addSecondWord()){
+                boolean state = addSecondWord(v);
+                if(state || (!state && words.size() > 0)){
                     try {
                         db.addWords(words);
                     } catch (Exception e) {
@@ -131,20 +132,19 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
 
     }
 
-    private boolean addSecondWord() {
+    private boolean addSecondWord(View v) {
         boolean res = false;
         int selectedId = rg1.getCheckedRadioButtonId();
         // find the radiobutton by returned id
         RadioButton radioSexButton = (RadioButton) findViewById(selectedId);
-        String gender = radioSexButton.getText().toString();
-        String partOfSpeech = spinner3.getSelectedItem().toString();
+        String gender = radioSexButton.getText().toString().trim().toLowerCase();
+        String partOfSpeech = spinner3.getSelectedItem().toString().toLowerCase();
 
-        String primary = String.valueOf(primaryWord.getText());
-        String secondary = String.valueOf(secondaryWord.getText());
-        String transcription = String.valueOf(transcriptionWord.getText());
+        String primary = String.valueOf(primaryWord.getText()).trim().toLowerCase();
+        String secondary = String.valueOf(secondaryWord.getText()).trim().toLowerCase();
+        String transcription = String.valueOf(transcriptionWord.getText()).trim().toLowerCase();
 
-        String note = String.valueOf(notes.getText());
-
+        String note = String.valueOf(notes.getText()).trim().toLowerCase();
         if(primary.equals("")){
             showAlert(1);
         }

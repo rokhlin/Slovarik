@@ -72,7 +72,7 @@ public class ViewWord_activity extends AppCompatActivity implements View.OnClick
 
         init();
 
-        populateWord(selected_ID);
+        populate(selected_ID);
         fillSameWords(word.getPrimary(), word.getSecondary());
 
 
@@ -108,7 +108,7 @@ public class ViewWord_activity extends AppCompatActivity implements View.OnClick
             sameWords.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    populateWord(ids[position]);
+                    populate(ids[position]);
                     fillSameWords(word.getPrimary(), word.getSecondary());
                 }
             });
@@ -117,7 +117,7 @@ public class ViewWord_activity extends AppCompatActivity implements View.OnClick
 
     }
 
-    private void populateWord(int id) {
+    private void populate(int id) {
         /**************** Init DATABASE *******************/
         DatabaseHandler db = new DatabaseHandler(this);
         word = db.getWordByID(id);

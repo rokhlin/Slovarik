@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,7 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
     private String FIRST_LANGUAGE = "IL";
     private String SECOND_LANGUAGE = "RU";
     private String SORT_PARAM = String.valueOf(SortingParameter.primary_parameter);
-
+    private String DEFAULT_TABLE = "IL_RU";
     public static final String PREFS_NAME = "SLOVARIK_PREFS";
     public static final String PREFS_FIRST_LANGUAGE = "FIRST_LANGUAGE";
     public static final String PREFS_SECOND_LANGUAGE = "SECOND_LANGUAGE";
@@ -128,22 +129,44 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_phrases_dictionary_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_dictionary, menu);
+        manager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        MenuItem menuItem = menu.findItem(R.id.action_searc);
+        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(final String query) {
+                if (query == null || query.equals("")) {
+                    populatePhrases(SORT_PARAM);
+                } else {
+                    populatePhrases(query);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                if (searchView.isActivated() && query.equals("")) {
+                    populatePhrases(SORT_PARAM);
+                } else {
+                    populatePhrases(query);
+                }
+                return true;
+            }
+        });
         return true;
     }
 
 
 
-    /**
-     * ************* Action Drawer ******************
-     */
+    /**************** Action Drawer *******************/
     @Override
     public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-        Intent intent;
-        switch (i) {
+
+        switch (iDrawerItem.getIdentifier()) {
             case 1:
-                intent = new Intent(PhrasesDictionary_activity.this, Dictionary_activity.class);
+                Intent intent = new Intent(PhrasesDictionary_activity.this, Dictionary_activity.class);
                 startActivity(intent);
                 break;
             case 2:
@@ -155,9 +178,7 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
         return true;
     }
 
-    /**
-     * ************* Toolbar Menu ******************
-     */
+    /*** ************* Toolbar Menu *******************/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -186,13 +207,14 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
     private void init() {
         /**************** Init Preferences *******************/
         pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-
+        readPreferences();
         /**************** Init Toolbar *******************/
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
 
         /**************** Init ActionDrawer *******************/
         leftDrawer = new LeftDrawer(mActionBarToolbar, this);
+
 
         /**************** Init Recycler View *******************/
         rv = (RecyclerView) findViewById(R.id.rv2);
@@ -212,7 +234,13 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
     private void populatePhrases(String parameter) {
         /**************** Init DATABASE *******************/
         DatabaseHandler db = new DatabaseHandler(this);
-        List<Phrase> phrases = db.getAllPhrases();
+        List<Phrase> phrases;
+        if(parameter.equals(SORT_PARAM)){
+            phrases = db.getAllPhrasesSortBy(SORT_PARAM, DEFAULT_TABLE);
+        }
+        else {
+            phrases = db.searchPhrases(parameter.trim().toLowerCase(),SORT_PARAM, DEFAULT_TABLE);
+        }
 
         RvPhrasesAdapter adapter = new RvPhrasesAdapter(phrases);
         rv.setAdapter(adapter);
@@ -227,6 +255,7 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
         editor.putString(PREFS_FIRST_LANGUAGE, FIRST_LANGUAGE);
         editor.putString(PREFS_SECOND_LANGUAGE, SECOND_LANGUAGE);
         editor.putString(PREFS_SORT_PARAM, SORT_PARAM);
+        editor.putString(PREFS_DEFAULT_TABLE, DEFAULT_TABLE);
 
         editor.apply();
     }
@@ -236,6 +265,7 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
         FIRST_LANGUAGE = pref.getString(PREFS_FIRST_LANGUAGE, "IL");
         SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, "RU");
         SORT_PARAM = pref.getString(PREFS_SORT_PARAM, String.valueOf(SortingParameter.primary_parameter));
+        DEFAULT_TABLE = pref.getString(PREFS_DEFAULT_TABLE, "IL_RU");
     }
 
 }

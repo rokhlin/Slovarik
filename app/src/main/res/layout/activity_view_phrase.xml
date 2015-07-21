@@ -1,0 +1,125 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ViewPrase_activity"
+        android:background="@color/backgroundColor"
+        android:orientation="vertical">
+
+        <include android:id="@+id/toolbar"
+            layout="@layout/toolbar"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/abc_search_url_text_selected"
+                android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/tv_viewWord_primary"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/project_horizontal_margin" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_viewWord_hiddenEditBottons"
+                    android:padding="@dimen/project_horizontal_margin"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ib_viewWord_edit"
+                        android:src="@drawable/edit"
+                        android:padding="@dimen/project_horizontal_margin" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ib_viewWord_delete"
+                        android:layout_gravity="center"
+                        android:src="@drawable/delete"
+                        android:padding="@dimen/project_horizontal_margin"
+                        android:layout_marginLeft="@dimen/project_horizontal_margin"
+                        android:layout_marginRight="@dimen/project_horizontal_margin" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ib_viewWord_cancel"
+                        android:src="@drawable/close"
+                        android:padding="@dimen/project_horizontal_margin" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:id="@+id/tv_viewWord_transcription"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:id="@+id/tv_viewWord_translation"
+                    android:layout_gravity="center" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Label_Category2"
+                        android:id="@+id/textView3"
+                        android:layout_marginLeft="@dimen/material_drawer_account_header_horizontal_bottom" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_viewWord_category"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/material_drawer_account_header_horizontal_bottom" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="@string/Label_Labels2"
+                    android:id="@+id/tv_viewWord_labelSameWords"
+                    android:layout_marginLeft="@dimen/project_horizontal_margin"
+                    android:layout_marginTop="@dimen/project_horizontal_margin" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_viewWord_notes"
+                    android:layout_margin="@dimen/project_horizontal_margin" />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="269dp"
+                    android:id="@+id/iv_ViewWord_sameword"
+                    android:clickable="true" />
+
+
+            </LinearLayout>
+        </ScrollView>
+
+</LinearLayout>

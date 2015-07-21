@@ -21,6 +21,7 @@ public class LeftDrawer {
         return result;
     }
 
+
     public AccountHeader getAccountHeader() {
         return accountHeader;
     }
@@ -46,7 +47,8 @@ public class LeftDrawer {
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem()
                                 .withName(R.string.menu_drawer_item_Phrases)
-                                .withIdentifier(2),
+                                .withIdentifier(2)
+                                .withBadge(getPhrasesCount()),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem()
                                 .withName(R.string.menu_drawer_item_Verbs)
@@ -58,6 +60,11 @@ public class LeftDrawer {
                 .withOnDrawerItemClickListener((Drawer.OnDrawerItemClickListener)currentActivity)
                 .build();
 
+    }
+
+    private String getPhrasesCount() {
+        DatabaseHandler db = new DatabaseHandler(currentActivity);
+        return db.getPhraseCount()+"";
     }
 
     private String getWordsCount() {

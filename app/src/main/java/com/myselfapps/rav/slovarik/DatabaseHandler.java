@@ -387,8 +387,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return labels;
     }
 
-
-
     //***************************************METHODS USING TABLE CATEGORY*****************************************//
     // Fill list Category from CURSOR
     private List<Category> fillCategories(Cursor cursor) {
@@ -605,10 +603,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
 
-
-
-
-
     //***************************************METHODS USING TABLE PHRASES*****************************************//
     // Fill list Phrases from CURSOR
     private List<Phrase> fillPhrases(Cursor cursor) {
@@ -695,6 +689,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return phrase;
     }
 
+
+    // Getting All Phrases Sort By Parameter
+    public List<Phrase> getAllPhrasesSortBy(String parameter, String wDictionary) {
+        Log.d("myLog", "--------------------------------Get All Phrases Sort By "+parameter+"------------------------------");
+        List<Phrase> phrases = new ArrayList<>();
+        orderBy = parameter;
+        //selectionArgs = new String[] { wDictionary };
+        //query ="SELECT rowid,* FROM " + TABLE_PHRASES + " WHERE "+KEY_DICTIONARY + " MATCH ? ORDER BY ?";
+
+        selection = KEY_DICTIONARY + " MATCH '"+ wDictionary +"'";
+        //selection = KEY_DICTIONARY +"=" +wDictionary ;
+        SQLiteDatabase db = this.getWritableDatabase();
+        //Cursor cursor = db.rawQuery(query, selectionArgs);
+        Cursor cursor = db.query(TABLE_PHRASES, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
+
+        // looping through all words and adding to list
+        if (cursor.moveToFirst()) {
+            phrases = fillPhrases(cursor);
+        }
+        return phrases;
+    }
+
     // Getting All Phrases
     public List<Phrase> getAllPhrases() {
         Log.d("myLog", "--------------------------------Get All Phrases------------------------------");
@@ -768,13 +784,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // FTS Search Phrases by STRING
-    public List<Phrase> searchPhrases(String searchStr) {
+    public List<Phrase> searchPhrases(String searchStr, String parameter, String wDictionary) {
         SQLiteDatabase db = this.getWritableDatabase();
         List<Phrase> phrases = new ArrayList<>();
         Cursor cursor = null;
-
-        selection = TABLE_PHRASES + " MATCH '"+ searchStr + "*'";
-
+        orderBy = parameter;
+        selection = TABLE_PHRASES + " MATCH '"+ searchStr + "*' " ;
+        /*selection ="SELECT rowid,* FROM " + TABLE_PHRASES
+                + " WHERE rowid IN (SELECT rowid FROM " + TABLE_PHRASES
+                + " WHERE "+TABLE_PHRASES + " MATCH '"+ searchStr+ "'"
+                + "AND rowid IN ( SELECT rowid FROM " + TABLE_PHRASES
+                + " WHERE "+KEY_DICTIONARY + " MATCH '" + wDictionary
+                + "'))";
+        */
         try{
             cursor = db.query(true, TABLE_PHRASES, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
 
@@ -793,8 +815,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return phrases;
     }
 
+    // Getting Phrase Count
+    public int getPhraseCount() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Log.d("myLog", "--------------------------------Get Phrase Count------------------------------");
+        String countQuery = "SELECT  rowid, * FROM " + TABLE_PHRASES;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int res = cursor.getCount();
+        cursor.close();
 
-
+        return res;
+    }
 
     //***************************************METHODS USING TABLE WORD*********************************************//
     // Filling Phrase from CURSOR
@@ -909,7 +940,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<Word> getAllWordsSortBy(String parameter) {
         Log.d("myLog", "--------------------------------Get All Words Sort By "+parameter+"------------------------------");
         List<Word> words = new ArrayList<>();
-        orderBy = "'"+parameter+"'";
+        orderBy = parameter;
        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_WORDS, columns, selection, selectionArgs, groupBy, having, orderBy, limit);
 

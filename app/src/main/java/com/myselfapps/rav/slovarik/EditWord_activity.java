@@ -22,16 +22,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 
-public class EditWord_activity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
+public class EditWord_activity extends AppCompatActivity {
     private SharedPreferences pref;
     private DatabaseHandler db;
     private Word word;
     private Toolbar mActionBarToolbar;
-    private LeftDrawer leftDrawer;
     private Spinner spinner3;
     private EditText primaryWord,secondaryWord, notes, transcriptionWord;
     private TextView secondaryWords;
@@ -47,6 +44,7 @@ public class EditWord_activity extends AppCompatActivity implements Drawer.OnDra
     public static final String PREFS_SECOND_LANGUAGE = "SECOND_LANGUAGE";
     private String[] genders;
     private String[] partOfSpeechData;
+
     @SuppressWarnings("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,9 +280,5 @@ public class EditWord_activity extends AppCompatActivity implements Drawer.OnDra
         });
     }
 
-    //Click Listener on Navigation Drawer
-    @Override
-    public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-        return false;
-    }
+
 }

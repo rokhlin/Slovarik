@@ -99,6 +99,12 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        <activity
+            android:name=".EditPhrase_activity"
+            android:label="@string/title_activity_edit_phrase_activity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme" >
+        </activity>
     </application>
 
 </manifest>

@@ -68,4 +68,5 @@
     <string name="title_activity_phrases_dictionary_activity">Phrases Dictionary</string>
     <string name="title_activity_add_new_phrase_activity">Add New Phrase</string>
     <string name="title_activity_view_prase">Prase</string>
+    <string name="title_activity_edit_phrase_activity">Edit Phrase</string>
 </resources>

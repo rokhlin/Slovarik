@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -145,21 +147,42 @@ public class ViewPhrase_activity extends AppCompatActivity implements View.OnCli
                 editButtons.setVisibility(View.GONE);
                 break;
             case R.id.ib_viewWord_delete:
-                db.deleteWord(selected_ID);
+                db.deletePhrase(selected_ID);
 
-                intent = new Intent(ViewPhrase_activity.this, Dictionary_activity.class);
+                intent = new Intent(ViewPhrase_activity.this, PhrasesDictionary_activity.class);
                 startActivity(intent);
                 break;
             case R.id.ib_viewWord_edit:
-//                intent = new Intent(this, EditWord_activity.class);
-//                intent.putExtra("selected_ID", phrase.getId());
-//                startActivity(intent);
+                intent = new Intent(this, EditPhrase_activity.class);
+                intent.putExtra("selected_ID", phrase.getId());
+                startActivity(intent);
                 break;
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_view_word, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+                int id = item.getItemId();
 
+        if (id == R.id.item_edit_word) {
+            if(editButtons.getVisibility()==View.GONE) {
+                editButtons.setVisibility(View.VISIBLE);
+            }
+            else if(editButtons.getVisibility()==View.VISIBLE) {
+                editButtons.setVisibility(View.GONE);
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
 
 

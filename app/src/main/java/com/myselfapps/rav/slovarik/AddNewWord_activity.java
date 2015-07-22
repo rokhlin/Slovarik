@@ -23,6 +23,9 @@ import android.widget.TextView;
 import com.melnykov.fab.FloatingActionButton;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.myselfapps.rav.slovarik.Handlers.DatabaseHandler;
+import com.myselfapps.rav.slovarik.Handlers.LeftDrawer;
+import com.myselfapps.rav.slovarik.Objects.Word;
 
 import java.util.ArrayList;
 

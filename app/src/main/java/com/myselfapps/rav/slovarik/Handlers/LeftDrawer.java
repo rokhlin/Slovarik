@@ -1,4 +1,4 @@
-package com.myselfapps.rav.slovarik;
+package com.myselfapps.rav.slovarik.Handlers;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.myselfapps.rav.slovarik.Handlers.DatabaseHandler;
+import com.myselfapps.rav.slovarik.R;
 
 public class LeftDrawer {
     private Drawer result;

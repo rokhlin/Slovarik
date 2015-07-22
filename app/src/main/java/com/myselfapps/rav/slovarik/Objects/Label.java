@@ -1,20 +1,23 @@
-package com.myselfapps.rav.slovarik;
+package com.myselfapps.rav.slovarik.Objects;
 
-public class Category {
+public class Label {
     private String Id;
     private String Name;
-    private String Phrase_id="";
-    private String Word_id="";
+    private String Group="";
     private String Notes ="";
     private String Dictionary="";
     private String Visibility="";
 
-    public Category() {
+    public Label() {
     }
 
-    public Category(String name) {
+    public Label(String name) {
         Name = name;
-        Id = "";
+    }
+
+    public Label( String name, String dictionary) {
+        Dictionary = dictionary;
+        Name = name;
     }
 
     public String getId() {
@@ -33,20 +36,12 @@ public class Category {
         Name = name;
     }
 
-    public String getPhrase_id() {
-        return Phrase_id;
+    public String getGroup() {
+        return Group;
     }
 
-    public void setPhrase_id(String phrase_id) {
-        Phrase_id = phrase_id;
-    }
-
-    public String getWord_id() {
-        return Word_id;
-    }
-
-    public void setWord_id(String word_id) {
-        Word_id = word_id;
+    public void setGroup(String group) {
+        Group = group;
     }
 
     public String getNotes() {

@@ -1,4 +1,4 @@
-package com.myselfapps.rav.slovarik;
+package com.myselfapps.rav.slovarik.Handlers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.myselfapps.rav.slovarik.Objects.Category;
+import com.myselfapps.rav.slovarik.Objects.Label;
+import com.myselfapps.rav.slovarik.Objects.Phrase;
+import com.myselfapps.rav.slovarik.Objects.Word;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.myselfapps.rav.slovarik;
+package com.myselfapps.rav.slovarik.Objects;
 
 public class Phrase {
     private String Id;

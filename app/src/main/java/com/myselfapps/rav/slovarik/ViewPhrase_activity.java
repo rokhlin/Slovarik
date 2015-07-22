@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.myselfapps.rav.slovarik.Handlers.DatabaseHandler;
+import com.myselfapps.rav.slovarik.Objects.Phrase;
+
 
 public class ViewPhrase_activity extends AppCompatActivity implements View.OnClickListener {
 

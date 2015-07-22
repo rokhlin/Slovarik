@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.myselfapps.rav.slovarik.Handlers.DatabaseHandler;
+import com.myselfapps.rav.slovarik.Objects.Word;
 
 
 public class EditWord_activity extends AppCompatActivity {

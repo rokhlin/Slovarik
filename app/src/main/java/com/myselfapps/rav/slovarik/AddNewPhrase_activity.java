@@ -18,6 +18,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.myselfapps.rav.slovarik.Handlers.DatabaseHandler;
+import com.myselfapps.rav.slovarik.Objects.Category;
+import com.myselfapps.rav.slovarik.Objects.Label;
+import com.myselfapps.rav.slovarik.Objects.Phrase;
 
 import java.util.List;
 

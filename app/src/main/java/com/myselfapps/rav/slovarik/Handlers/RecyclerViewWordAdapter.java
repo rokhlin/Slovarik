@@ -1,4 +1,4 @@
-package com.myselfapps.rav.slovarik;
+package com.myselfapps.rav.slovarik.Handlers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,11 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.myselfapps.rav.slovarik.Objects.Word;
+import com.myselfapps.rav.slovarik.R;
+import com.myselfapps.rav.slovarik.ViewWord_activity;
+
 import java.util.List;
 
 public class RecyclerViewWordAdapter extends RecyclerView.Adapter<RecyclerViewWordAdapter.WordViewHolder> {
     private List<Word> words;
-    RecyclerViewWordAdapter(List<Word> words) {
+    public RecyclerViewWordAdapter(List<Word> words) {
         this.words = words;
     }
 

@@ -1,4 +1,4 @@
-package com.myselfapps.rav.slovarik;
+package com.myselfapps.rav.slovarik.Handlers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,11 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.myselfapps.rav.slovarik.Objects.Phrase;
+import com.myselfapps.rav.slovarik.R;
+import com.myselfapps.rav.slovarik.ViewPhrase_activity;
+
 import java.util.List;
 
 public class RvPhrasesAdapter extends RecyclerView.Adapter<RvPhrasesAdapter.PhraseViewHolder> {
     private List<Phrase> phrases;
-    RvPhrasesAdapter(List<Phrase> phrases) {
+    public RvPhrasesAdapter(List<Phrase> phrases) {
         this.phrases = phrases;
     }
 

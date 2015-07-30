@@ -186,6 +186,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    // Adding new Labels
+    public void addLabels(ArrayList<Label> labels) {
+        Log.d("myLog", "--------------------------------Add words------------------------------");
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for (Label label : labels){
+            addLabel(label);
+        }
+        db.close();
+    }
+
     private Boolean checkDuplicates(Label label) {
         boolean res = false;
         Label w = getLabelByName(label.getName());
@@ -442,6 +453,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    // Adding new Categories
+    public void addCategories(ArrayList<Category> categories) {
+        Log.d("myLog", "--------------------------------Add words------------------------------");
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for (Category category : categories){
+            addCategory(category);
+        }
+        db.close();
+    }
+
     private Boolean checkDuplicates(Category category) {
         boolean res = false;
         Category w = getCategoryByName(category.getName());
@@ -662,6 +684,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         else {
             Log.d("myLog", "--------------------------------Add phrase aborted, Found Duplicate------------");
         }
+    }
+
+    // Adding new Phrases
+    public void addPhrases(ArrayList<Phrase> phrases) {
+        Log.d("myLog", "--------------------------------Add words------------------------------");
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for (Phrase phrase : phrases){
+            addPhrase(phrase);
+        }
+        db.close();
     }
 
     private Boolean checkDuplicates(Phrase phrase) {
@@ -929,7 +962,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Log.d("myLog", "--------------------------------Get All Words------------------------------");
         List<Word> words = new ArrayList<>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_WORDS;
+        String selectQuery = "SELECT  rowid,* FROM " + TABLE_WORDS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

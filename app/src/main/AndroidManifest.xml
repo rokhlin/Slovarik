@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.myselfapps.rav.slovarik" >
+    package="com.myselfapps.rav.slovarik"
+    android:installLocation="auto" >
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -101,8 +104,13 @@
         </activity>
         <activity
             android:name=".EditPhrase_activity"
-            android:label="@string/title_activity_edit_phrase_activity"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_edit_phrase_activity"
+            android:theme="@style/AppTheme" >
+        </activity>
+        <activity
+            android:name=".BuckupManager_activity"
+            android:label="@string/title_activity_buckup_manager_activity"
             android:theme="@style/AppTheme" >
         </activity>
     </application>

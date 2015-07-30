@@ -6,6 +6,7 @@
     <string name="menu_drawer_item_Dictionary">Dictionary</string>
     <string name="menu_drawer_item_Phrases">Phrases</string>
     <string name="menu_drawer_item_Verbs">Verbs</string>
+    <string name="menu_drawer_item_BackupMen">Backup manager</string>
     <string name="menu_drawer_item_AboutUs">About Us</string>
 
     <string name="action_settings">Settings</string>
@@ -44,7 +45,7 @@
     <string name="Label_Type_Word">Type Word</string>
     <string name="Label_Type_Translation">Type Translation</string>
     <string name="Label_Save">Save</string>
-    <string name="title_activity_view_word">View word</string>
+
     <string name="Label_SameWords">Same Words</string>
     <string name="Label_Labels">Labels</string>
     <string name="Label_Labels2">Labels:</string>
@@ -59,14 +60,23 @@
     <string name="Base_Category_Official">Official</string>
     <string name="Base_Category_Lingo">Lingo</string>
 
+    <string name="btn_create_backup">Create backup</string>
+    <string name="btn_load_backup">Load backup</string>
+    <string name="btn_read_backup">Read backup</string>
+
     <string name="Alert_dialog_title">Invalid input</string>
     <string name="Alert_dialog_Invalid_Primary">Word must be filled in</string>
     <string name="Alert_dialog_Invalid_Translation">Translation must be filled in</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_view_word">View word</string>
     <string name="title_activity_edit_word_activity">Edit Word</string>
     <string name="title_activity_phrases_dictionary_activity">Phrases Dictionary</string>
     <string name="title_activity_add_new_phrase_activity">Add New Phrase</string>
     <string name="title_activity_view_prase">Prase</string>
     <string name="title_activity_edit_phrase_activity">Edit Phrase</string>
+    <string name="title_activity_buckup_manager_activity">Buckup Manager</string>
+
+    <string name="messages_added">Added: </string>
+
 </resources>

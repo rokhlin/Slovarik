@@ -1,5 +1,8 @@
 package com.myselfapps.rav.slovarik.Objects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Label {
     private String Id;
     private String Name;
@@ -11,6 +14,32 @@ public class Label {
     public Label() {
     }
 
+    public Label(HashMap<String,String> fields) {
+        for (Map.Entry<String,String> w : fields.entrySet()){
+            switch (w.getKey()){
+                case "rowid":
+                    Id = w.getValue();
+                    break;
+                case "Name":
+                    Name = w.getValue();
+                    break;
+                case "Group":
+                    Group = w.getValue();
+                    break;
+                case "Notes":
+                    Notes = w.getValue();
+                    break;
+                case "Dictionary":
+                    Dictionary = w.getValue();
+                    break;
+                case "Visibility":
+                    Visibility = w.getValue();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
     public Label(String name) {
         Name = name;
     }

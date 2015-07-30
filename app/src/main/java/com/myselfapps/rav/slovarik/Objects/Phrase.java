@@ -1,5 +1,8 @@
 package com.myselfapps.rav.slovarik.Objects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Phrase {
     private String Id;
     private String Primary;
@@ -24,6 +27,48 @@ public class Phrase {
         Label = label;
         Notes = notes;
         Dictionary = dictionary;
+    }
+
+    public Phrase(HashMap<String,String> fields) {
+        for (Map.Entry<String,String> w : fields.entrySet()){
+            switch (w.getKey()){
+                case "rowid":
+                    Id = w.getValue();
+                    break;
+                case "Primary":
+                    Primary = w.getValue();
+                    break;
+                case "Transcription":
+                    Transcription = w.getValue();
+                    break;
+                case "Secondary":
+                    Secondary = w.getValue();
+                    break;
+                case "Category":
+                    Category = w.getValue();
+                    break;
+                case "Label":
+                    Label = w.getValue();
+                    break;
+                case "Notes":
+                    Notes = w.getValue();
+                    break;
+                case "Dictionary":
+                    Dictionary = w.getValue();
+                    break;
+                case "Field1":
+                    Field1 = w.getValue();
+                    break;
+                case "Field2":
+                    Field2 = w.getValue();
+                    break;
+                case "Field3":
+                    Field3 = w.getValue();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public String getTranscription() {

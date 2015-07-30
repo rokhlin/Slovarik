@@ -1,5 +1,8 @@
 package com.myselfapps.rav.slovarik.Objects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Category {
     private String Id;
     private String Name;
@@ -10,6 +13,36 @@ public class Category {
     private String Visibility="";
 
     public Category() {
+    }
+
+    public Category(HashMap<String,String> fields) {
+        for (Map.Entry<String,String> w : fields.entrySet()){
+            switch (w.getKey()){
+                case "rowid":
+                    Id = w.getValue();
+                    break;
+                case "Name":
+                    Name = w.getValue();
+                    break;
+                case "Phrase_id":
+                    Phrase_id = w.getValue();
+                    break;
+                case "Word_id":
+                    Word_id = w.getValue();
+                    break;
+                case "Notes":
+                    Notes = w.getValue();
+                    break;
+                case "Dictionary":
+                    Dictionary = w.getValue();
+                    break;
+                case "Visibility":
+                    Visibility = w.getValue();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public Category(String name) {

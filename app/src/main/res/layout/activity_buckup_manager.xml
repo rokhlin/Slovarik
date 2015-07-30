@@ -1,0 +1,51 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BuckupManager_activity"
+    android:background="@color/backgroundColor">
+
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_create_backup"
+        android:id="@+id/btn_create_backup"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="62dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_read_backup"
+        android:id="@+id/btn_read_backup"
+        android:layout_below="@+id/btn_create_backup"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_load_backup"
+        android:id="@+id/btn_load_backup"
+        android:layout_below="@+id/btn_read_backup"
+        android:layout_alignLeft="@+id/btn_read_backup"
+        android:layout_alignStart="@+id/btn_read_backup" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/btn_load_backup"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvMessage" />
+    </ScrollView>
+
+
+</RelativeLayout>

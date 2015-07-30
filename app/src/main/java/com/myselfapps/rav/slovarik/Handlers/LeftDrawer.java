@@ -11,7 +11,6 @@ import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.myselfapps.rav.slovarik.Handlers.DatabaseHandler;
 import com.myselfapps.rav.slovarik.R;
 
 public class LeftDrawer {
@@ -55,6 +54,9 @@ public class LeftDrawer {
                         new SecondaryDrawerItem()
                                 .withName(R.string.menu_drawer_item_Verbs)
                                 .withIdentifier(10),
+                        new SecondaryDrawerItem()
+                                .withName(R.string.menu_drawer_item_BackupMen)
+                                .withIdentifier(12),
                         new SecondaryDrawerItem()
                                 .withName(R.string.menu_drawer_item_AboutUs)
                                 .withIdentifier(11)

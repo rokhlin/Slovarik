@@ -173,6 +173,10 @@ public class Dictionary_activity extends AppCompatActivity implements Drawer.OnD
                 intent = new Intent(Dictionary_activity.this, PhrasesDictionary_activity.class);
                 startActivity(intent);
                 break;
+            case 12:
+                intent = new Intent(Dictionary_activity.this, BuckupManager_activity.class);
+                startActivity(intent);
+                break;
 
         }
 

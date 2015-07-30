@@ -1,5 +1,8 @@
 package com.myselfapps.rav.slovarik.Objects;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Word {
     private String Id;
     private String Primary;
@@ -94,6 +97,72 @@ public class Word {
     }
 
     public Word() {}
+
+    public Word(HashMap<String,String> fields) {
+        for (Map.Entry<String,String> w : fields.entrySet()){
+            switch (w.getKey()){
+                case "rowid":
+                    Id = w.getValue();
+                    break;
+                case "Primary":
+                    Primary = w.getValue();
+                    break;
+                case "Transcription":
+                    Transcription = w.getValue();
+                    break;
+                case "Secondary":
+                    Secondary = w.getValue();
+                    break;
+                case "Gender":
+                    Gender = w.getValue();
+                    break;
+                case "PartOfSpeech":
+                    PartOfSpeech = w.getValue();
+                    break;
+                case "Notes":
+                    Notes = w.getValue();
+                    break;
+                case "Audio":
+                    Audio = w.getValue();
+                    break;
+                case "Picture":
+                    Picture = w.getValue();
+                    break;
+                case "Group1":
+                    Group1 = w.getValue();
+                    break;
+                case "Group2":
+                    Group2 = w.getValue();
+                    break;
+                case "Dictionary":
+                    Dictionary = w.getValue();
+                    break;
+                case "PluralForm":
+                    PluralForm = w.getValue();
+                    break;
+                case "Exception":
+                    Exception = w.getValue();
+                    break;
+                case "Field1":
+                    Field1 = w.getValue();
+                    break;
+                case "Field2":
+                    Field2 = w.getValue();
+                    break;
+                case "Field3":
+                    Field3 = w.getValue();
+                    break;
+                case "Field4":
+                    Field4 = w.getValue();
+                    break;
+                case "Field5":
+                    Field5 = w.getValue();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     public Word(String primary,  String transcription, String secondary, String gender, String partOfSpeech, String notes, String audio, String picture, String group1, String group2) {
         Primary = primary;
@@ -196,6 +265,7 @@ public class Word {
     public void setPartOfSpeech(String partOfSpeech) {
         PartOfSpeech = partOfSpeech;
     }
+
 
 
 }

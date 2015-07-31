@@ -28,7 +28,7 @@ public class RvPhrasesAdapter extends RecyclerView.Adapter<RvPhrasesAdapter.Phra
 
     @Override
     public void onBindViewHolder(PhraseViewHolder holder, int position) {
-        PhraseViewHolder.primary.setText(phrases.get(position).getId()+" - "+phrases.get(position).getPrimary());//Убрать по завершении
+        PhraseViewHolder.primary.setText(phrases.get(position).getPrimary());
         PhraseViewHolder.translation.setText(phrases.get(position).getSecondary());
         PhraseViewHolder.transcription.setText("[" + phrases.get(position).getTranscription() + "]");
         PhraseViewHolder.category.setText(phrases.get(position).getCategory());

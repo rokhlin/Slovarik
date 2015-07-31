@@ -24,37 +24,31 @@ import com.melnykov.fab.FloatingActionButton;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.myselfapps.rav.slovarik.Handlers.DatabaseHandler;
-import com.myselfapps.rav.slovarik.Handlers.LeftDrawer;
 import com.myselfapps.rav.slovarik.Objects.Word;
 
 import java.util.ArrayList;
 
 
 public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
-    private Toolbar mActionBarToolbar;
-    private LeftDrawer leftDrawer;
     private Spinner spinner3;
     private EditText primaryWord,secondaryWord, notes, transcriptionWord;
     private TextView secondaryWords;
     private RadioGroup rg1;
     private ArrayList<Word> words = new ArrayList<>();
     private DatabaseHandler db;
-    private SharedPreferences pref;
 
     private String FIRST_LANGUAGE ="IL";
     private String SECOND_LANGUAGE ="RU";
 
     public static final String PREFS_NAME = "SLOVARIK_PREFS";
-    public static final String PREFS_FIRST_LANGUAGE = "FIRST_LANGUAGE";
-    public static final String PREFS_SECOND_LANGUAGE = "SECOND_LANGUAGE";
+    public static final String PREFS_DEFAULT_TABLE = "DEFAULT_TABLE";
 
-    int[] spinner_1_data = {R.drawable.ru_thumb, R.drawable.il_thumb};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_word);
         initToolbar();
-        pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         readPreferences();
         initFloatingButton();
 
@@ -73,7 +67,7 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         addSecondaryWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addSecondWord(v);
+                addSecondWord();
             }
         });
 
@@ -88,8 +82,8 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean state = addSecondWord(v);
-                if(state || (!state && words.size() > 0)){
+                boolean state = addSecondWord();
+                if(state || (words.size() > 0)){
                     try {
                         db.addWords(words);
                     } catch (Exception e) {
@@ -135,7 +129,7 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
 
     }
 
-    private boolean addSecondWord(View v) {
+    private boolean addSecondWord() {
         boolean res = false;
         int selectedId = rg1.getCheckedRadioButtonId();
         // find the radiobutton by returned id
@@ -197,8 +191,14 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
     }
 
     private void readPreferences() {
-        FIRST_LANGUAGE = pref.getString(PREFS_FIRST_LANGUAGE, null);
-        SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, null);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String DEFAULT_TABLE = pref.getString(PREFS_DEFAULT_TABLE, null);
+        String[] strings = new String[0];
+        if (DEFAULT_TABLE != null) {
+            strings = DEFAULT_TABLE.split("_");
+        }
+        FIRST_LANGUAGE = strings[0];
+        SECOND_LANGUAGE = strings[1];
     }
 
     private void setSecondaryWordHint() {
@@ -243,7 +243,7 @@ public class AddNewWord_activity extends AppCompatActivity implements Drawer.OnD
     }
 
     private void initToolbar() {
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mActionBarToolbar);
 
     }

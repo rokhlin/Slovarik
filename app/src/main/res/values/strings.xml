@@ -58,7 +58,7 @@
     <string name="Base_Category_Questions">Questions</string>
     <string name="Base_Category_Answers">Answers</string>
     <string name="Base_Category_Official">Official</string>
-    <string name="Base_Category_Lingo">Lingo</string>
+    <string name="Base_Category_Exception">Exception</string>
 
     <string name="btn_create_backup">Create backup</string>
     <string name="btn_load_backup">Load backup</string>

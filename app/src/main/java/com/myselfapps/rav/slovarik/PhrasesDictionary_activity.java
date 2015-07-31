@@ -219,7 +219,6 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
         /**************** Init ActionDrawer *******************/
         leftDrawer = new LeftDrawer(mActionBarToolbar, this);
 
-
         /**************** Init Recycler View *******************/
         rv = (RecyclerView) findViewById(R.id.rv2);
 

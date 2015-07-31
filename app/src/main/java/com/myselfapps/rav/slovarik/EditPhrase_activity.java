@@ -171,7 +171,7 @@ public class EditPhrase_activity extends AppCompatActivity implements View.OnCli
                     getResources().getString(R.string.Base_Category_Answers),
                     getResources().getString(R.string.Base_Category_Questions),
                     getResources().getString(R.string.Base_Category_Official),
-                    getResources().getString(R.string.Base_Category_Lingo)};
+                    getResources().getString(R.string.Base_Category_Exception)};
             for (String baseCategory : baseCategories) {
                 db.addCategory(new Category(baseCategory));
             }
@@ -255,6 +255,7 @@ public class EditPhrase_activity extends AppCompatActivity implements View.OnCli
         }
         else {
             if(checkChanges()) {
+                if(pLabels ==null) pLabels = "";
                 phrase = new Phrase(pPrimary, pTranscription, pSecondary, pCategory, pLabels, pNotes, DEFAULT_TABLE);
                 phrase.setId(selected_ID+"");
                 res = true;

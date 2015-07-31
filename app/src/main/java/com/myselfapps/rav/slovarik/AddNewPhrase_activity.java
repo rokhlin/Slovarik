@@ -38,13 +38,12 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
     private SharedPreferences pref;
     private List<Label> labels;
     private String pLabels = null;
+
     private String FIRST_LANGUAGE ="IL";
     private String SECOND_LANGUAGE ="RU";
 
-    private String DEFAULT_TABLE = "IL-RU_PHRASES";
+    private String DEFAULT_TABLE = "IL_RU";
     public static final String PREFS_NAME = "SLOVARIK_PREFS";
-    public static final String PREFS_FIRST_LANGUAGE = "FIRST_LANGUAGE";
-    public static final String PREFS_SECOND_LANGUAGE = "SECOND_LANGUAGE";
     public static final String PREFS_DEFAULT_TABLE = "DEFAULT_TABLE";
 
 
@@ -77,7 +76,7 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
     }
 
     private void setAddedLabels() {
-        if(pLabels != null) {
+        if(pLabels == null) {
             String[] strings = pLabels.split("<->");
             String str = "[";
             for (String s : strings) {
@@ -102,13 +101,18 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
 
 
     private void initLabels() {
-        db = new DatabaseHandler(this);
-        if (db.getLabelCount()<=0) {
-            String[] baseLabels = new String[]{"my", "your", "eat", "verb", "exception"};// заменить потом на значения из ресурсов
-            for (String baseLabel : baseLabels) {
-                db.addCategory(new Category(baseLabel));//?????
-            }
-        }
+//        db = new DatabaseHandler(this);
+//        if (db.getLabelCount()<=0) {
+//            String[] baseLabels = new String[]{
+//                    getResources().getString(R.string.Base_Category_Unsorted),
+//                    getResources().getString(R.string.Base_Category_Answers),
+//                    getResources().getString(R.string.Base_Category_Questions),
+//                    getResources().getString(R.string.Base_Category_Official),
+//                    getResources().getString(R.string.Base_Category_Exception)};
+//            for (String baseLabel : baseLabels) {
+//                db.addCategory(new Category(baseLabel));//?????
+//            }
+//        }
         labels = db.getAllLabels();
 
     }
@@ -133,14 +137,14 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
     }
 
     private void initSpinner() {
-        db = new DatabaseHandler(this);
+       db = new DatabaseHandler(this);
         if (db.getCategoryCount()<=0){
             String[] baseCategories = new String[]{
                     getResources().getString(R.string.Base_Category_Unsorted),
                     getResources().getString(R.string.Base_Category_Answers),
                     getResources().getString(R.string.Base_Category_Questions),
                     getResources().getString(R.string.Base_Category_Official),
-                    getResources().getString(R.string.Base_Category_Lingo)};
+                    getResources().getString(R.string.Base_Category_Exception)};
             for (String baseCategory : baseCategories) {
                 db.addCategory(new Category(baseCategory));
             }
@@ -175,9 +179,11 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
     }
 
     private void readPreferences() {
-        FIRST_LANGUAGE = pref.getString(PREFS_FIRST_LANGUAGE, null);
-        SECOND_LANGUAGE = pref.getString(PREFS_SECOND_LANGUAGE, null);
-        DEFAULT_TABLE = pref.getString(PREFS_DEFAULT_TABLE, "IL-RU_PHRASES");
+
+        DEFAULT_TABLE = pref.getString(PREFS_DEFAULT_TABLE, "IL_RU");
+        String[] strings = DEFAULT_TABLE.split("_");
+        FIRST_LANGUAGE = strings[0];
+        SECOND_LANGUAGE = strings[1];
     }
 
     private void initFloatingButton() {
@@ -214,6 +220,7 @@ public class AddNewPhrase_activity extends AppCompatActivity implements View.OnC
             showAlert(2);
         }
         else {
+            if(pLabels == null) pLabels = "";
             phrase = new Phrase(pPrimary,pTranscription,pSecondary,pCategory,pLabels,pNotes,DEFAULT_TABLE);
             res = true;
         }

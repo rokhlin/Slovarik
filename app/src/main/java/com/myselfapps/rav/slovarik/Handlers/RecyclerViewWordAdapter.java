@@ -28,7 +28,7 @@ public class RecyclerViewWordAdapter extends RecyclerView.Adapter<RecyclerViewWo
 
     @Override
     public void onBindViewHolder(WordViewHolder holder, int position) {
-        WordViewHolder.firstName.setText(words.get(position).getId()+" - "+words.get(position).getPrimary());//Убрать по завершении
+        WordViewHolder.firstName.setText(words.get(position).getPrimary());
         WordViewHolder.translation.setText(words.get(position).getSecondary());
         WordViewHolder.transcription.setText("[" + words.get(position).getTranscription() + "]");
         WordViewHolder.gender.setText(words.get(position).getGender());

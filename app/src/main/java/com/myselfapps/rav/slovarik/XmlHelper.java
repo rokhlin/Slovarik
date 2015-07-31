@@ -1,7 +1,10 @@
 package com.myselfapps.rav.slovarik;
 
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
+import android.os.Environment;
 
 import com.myselfapps.rav.slovarik.Handlers.DatabaseHandler;
 import com.myselfapps.rav.slovarik.Objects.Category;
@@ -58,6 +61,7 @@ public class XmlHelper {
         this.path = path;
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     public void create() throws TransformerException, IOException, ParserConfigurationException {
 
         builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -74,8 +78,9 @@ public class XmlHelper {
                 createFields(CATEGORY, (ArrayList<Category>) db.getAllCategories()));
 
         doc.appendChild(rootElement);
+//context.getFilesDir(),
+        file = new File(context.getDir(Environment.DIRECTORY_DOWNLOADS,Context.MODE_PRIVATE).getPath(),"DBExport.xml");
 
-        file = new File(context.getFilesDir(), "slovarikDBExport.xml");
         path = file.getPath();
         Transformer t = TransformerFactory.newInstance().newTransformer();
         t.transform(new DOMSource(doc), new StreamResult(file));

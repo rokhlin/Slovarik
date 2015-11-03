@@ -176,6 +176,9 @@ public class PhrasesDictionary_activity extends AppCompatActivity implements Dra
             case 2:
                 populatePhrases(SORT_PARAM);
                 break;
+            case 12:
+                intent = new Intent(PhrasesDictionary_activity.this, BuckupManager_activity.class);
+                startActivity(intent);
 
         }
 

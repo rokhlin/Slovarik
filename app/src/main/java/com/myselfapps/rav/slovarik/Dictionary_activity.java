@@ -27,7 +27,7 @@ import com.myselfapps.rav.slovarik.Objects.Word;
 
 import java.util.List;
 
-
+//experiment
 public class Dictionary_activity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener{
     private enum SortingParameter{
         primary_parameter, translation
